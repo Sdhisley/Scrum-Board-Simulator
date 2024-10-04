@@ -120,8 +120,9 @@ public class NewUserStoryForm extends JFrame implements BaseComponent {
                 new CustomConstraints(1, 4, GridBagConstraints.WEST, GridBagConstraints.NONE));
 
         add(myJpanel);
-    }
 
+
+    }    
     public UserStory getUserStoryObject() {
         String name = nameField.getText();
         String description = descArea.getText();
