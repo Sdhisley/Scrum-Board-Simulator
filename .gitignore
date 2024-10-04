@@ -1,0 +1,29 @@
+# Gradle specific
+.gradle/
+build/
+out/
+
+# IntelliJ IDEA specific
+*.iml
+.idea/
+
+# macOS specific
+.DS_Store
+
+# Log files
+*.log
+
+# Exclude Eclipse project files
+.classpath
+.project
+.settings/
+
+# Ignore generated files by Android Studio
+*.apk
+*.ap_
+
+# Gradle Wrapper
+gradle-wrapper.jar
+
+# Other OS files
+Thumbs.db
