@@ -87,7 +87,7 @@ public class NewUserStoryForm extends JFrame implements BaseComponent {
                 new CustomConstraints(
                        0,3, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL));
                        myJpanel.add(
-        bvCombo,  // Step 2: Add the bvCombo to the UI
+        bvCombo,
         new CustomConstraints(
                1, 3, GridBagConstraints.EAST, 1.0, 0.0, GridBagConstraints.HORIZONTAL));
                        
