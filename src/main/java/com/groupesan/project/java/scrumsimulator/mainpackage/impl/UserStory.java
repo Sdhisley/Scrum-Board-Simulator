@@ -17,6 +17,8 @@ public class UserStory extends ScrumObject {
 
     private double pointValue;
 
+    private double businessValue;
+
     private UserStoryState state;
 
     private Player owner;
@@ -29,10 +31,11 @@ public class UserStory extends ScrumObject {
      * @param name the name for the user story
      * @param pointValue the point value for the story as a way of estimating required effort.
      */
-    public UserStory(String name, double pointValue) {
+    public UserStory(String name, double pointValue, double businessValue) {
         this.name = name;
         this.description = "";
         this.pointValue = pointValue;
+        this.businessValue = businessValue;
         this.state = new UserStoryUnselectedState(this);
     }
 
@@ -44,10 +47,11 @@ public class UserStory extends ScrumObject {
      *     requirements.
      * @param pointValue the point value for the story as a way of estimating required effort.
      */
-    public UserStory(String name, String description, double pointValue) {
+    public UserStory(String name, String description, double pointValue, double businessValue) {
         this.name = name;
         this.description = description;
         this.pointValue = pointValue;
+        this.businessValue =  businessValue;
         this.state = new UserStoryUnselectedState(this);
     }
 
@@ -94,6 +98,12 @@ public class UserStory extends ScrumObject {
      */
     public String getDescription() {
         return description;
+    }
+    public void setBusinessValue(double businessValue) {
+        this.businessValue = businessValue;
+    }
+    public double getBusinessValue() {
+        return businessValue;
     }
 
     /**
