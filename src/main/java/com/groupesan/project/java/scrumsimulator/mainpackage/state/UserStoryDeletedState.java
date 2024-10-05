@@ -22,4 +22,8 @@ public class UserStoryDeletedState extends UserStoryState {
     public String onDelete() {
         return "Deleted";
     }
+    @Override
+    public String toString() {
+        return "Deleted";
+    }
 }

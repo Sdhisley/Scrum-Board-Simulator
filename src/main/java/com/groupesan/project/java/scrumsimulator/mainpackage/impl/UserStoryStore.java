@@ -29,6 +29,9 @@ public class UserStoryStore {
     public void addUserStory(UserStory userStory) {
         userStories.add(userStory);
     }
+     public void removeUserStory(UserStory story) {
+        userStories.remove(story);
+    }
 
     public List<UserStory> getUserStories() {
         return new ArrayList<>(userStories);

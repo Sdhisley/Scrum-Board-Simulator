@@ -1,22 +1,27 @@
 package com.groupesan.project.java.scrumsimulator.mainpackage.ui.panels;
 
-import com.groupesan.project.java.scrumsimulator.mainpackage.impl.UserStory;
-import com.groupesan.project.java.scrumsimulator.mainpackage.ui.widgets.BaseComponent;
-import com.groupesan.project.java.scrumsimulator.mainpackage.utils.CustomConstraints;
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
+
+import com.groupesan.project.java.scrumsimulator.mainpackage.impl.UserStory;
+import com.groupesan.project.java.scrumsimulator.mainpackage.impl.UserStoryStore;
+import com.groupesan.project.java.scrumsimulator.mainpackage.state.UserStoryDeletedState;
+import com.groupesan.project.java.scrumsimulator.mainpackage.ui.widgets.BaseComponent;
+import com.groupesan.project.java.scrumsimulator.mainpackage.utils.CustomConstraints;
 
 public class EditUserStoryForm extends JFrame implements BaseComponent {
 
@@ -119,6 +124,37 @@ public class EditUserStoryForm extends JFrame implements BaseComponent {
                         dispose();
                     }
                 });
+                JButton deleteButton = new JButton("Delete");
+       myJpanel.add(
+    deleteButton,
+    new CustomConstraints(3, 4, GridBagConstraints.WEST, GridBagConstraints.NONE));
+                deleteButton.addActionListener(
+    new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            int confirm = JOptionPane.showConfirmDialog(
+                    EditUserStoryForm.this,
+                    "Are you sure you want to delete this User Story?",
+                    "Confirm Delete",
+                    JOptionPane.YES_NO_OPTION
+            );
+            
+            if (confirm == JOptionPane.YES_OPTION) {
+                // Logic to delete the userStory from your storage
+                 UserStoryStore userStoryStore = UserStoryStore.getInstance();
+                userStoryStore.removeUserStory(userStory);
+                userStory.changeState(new UserStoryDeletedState(userStory));
+                dispose();
+            }
+  }
+
+            private void UserStoryDeletedState(UserStory userStory) {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+        }
+);
+
+        add(myJpanel);
 
         myJpanel.add(
                 cancelButton,
@@ -126,11 +162,5 @@ public class EditUserStoryForm extends JFrame implements BaseComponent {
         myJpanel.add(
                 submitButton,
                 new CustomConstraints(2, 4, GridBagConstraints.WEST, GridBagConstraints.NONE));
-                JButton deleteButton = new JButton("Delete");
-       myJpanel.add(
-    deleteButton,
-    new CustomConstraints(3, 4, GridBagConstraints.WEST, GridBagConstraints.NONE));
-
-        add(myJpanel);
     }
 }

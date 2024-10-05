@@ -1,12 +1,14 @@
 package com.groupesan.project.java.scrumsimulator.mainpackage.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.groupesan.project.java.scrumsimulator.mainpackage.core.Player;
 import com.groupesan.project.java.scrumsimulator.mainpackage.core.ScrumIdentifier;
 import com.groupesan.project.java.scrumsimulator.mainpackage.core.ScrumObject;
+import com.groupesan.project.java.scrumsimulator.mainpackage.state.UserStoryDeletedState;
 import com.groupesan.project.java.scrumsimulator.mainpackage.state.UserStoryState;
 import com.groupesan.project.java.scrumsimulator.mainpackage.state.UserStoryUnselectedState;
-import java.util.ArrayList;
-import java.util.List;
 
 public class UserStory extends ScrumObject {
     private UserStoryIdentifier id;
@@ -154,6 +156,11 @@ public class UserStory extends ScrumObject {
      */
     public void changeState(UserStoryState state) {
         this.state = state;
+    }
+    public void deleteUserStory() {
+        // Change the state to deleted
+        this.state = new UserStoryDeletedState(this);
+        UserStoryStore.getInstance().removeUserStory(this);
     }
 
     /**
