@@ -32,6 +32,8 @@ public class NewSprintForm extends JFrame implements BaseComponent {
     JTextArea descArea = new JTextArea();
     SpinnerNumberModel spinnerNumberModel = new SpinnerNumberModel(5, 1, 999999, 1);
     JSpinner sprintDays = new JSpinner(spinnerNumberModel);
+    SpinnerNumberModel spinnerNumberModel1 = new SpinnerNumberModel(1, 1, 999999, 1);
+    JSpinner numberOfsprints = new JSpinner(spinnerNumberModel1);
 
     DefaultListModel<String> listModel;
     JList<String> usList;
@@ -78,10 +80,22 @@ public class NewSprintForm extends JFrame implements BaseComponent {
                 pointsLabel,
                 new CustomConstraints(
                         0, 2, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL));
+                        
         myJpanel.add(
                 sprintDays,
                 new CustomConstraints(
                         1, 2, GridBagConstraints.EAST, 1.0, 0.0, GridBagConstraints.WEST));
+
+        JLabel pointsLabel1 = new JLabel("Number of Sprints: ");
+        myJpanel.add(
+                pointsLabel1,
+                new CustomConstraints(
+                        0, 3, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL));
+
+        myJpanel.add(
+                numberOfsprints,
+                new CustomConstraints(
+                        1, 3, GridBagConstraints.EAST, 1.0, 0.0, GridBagConstraints.WEST));
 
         JButton cancelButton = new JButton("Cancel");
 
@@ -117,18 +131,18 @@ public class NewSprintForm extends JFrame implements BaseComponent {
         myJpanel.add(
                 userStoriesLabel,
                 new CustomConstraints(
-                        0, 3, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL));
+                        0, 4, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL));
         myJpanel.add(
                 usList,
                 new CustomConstraints(
-                        1, 3, GridBagConstraints.WEST, 1.0, 0.0, GridBagConstraints.NONE));
+                        1, 4, GridBagConstraints.WEST, 1.0, 0.0, GridBagConstraints.NONE));
 
         myJpanel.add(
                 cancelButton,
-                new CustomConstraints(0, 4, GridBagConstraints.EAST, GridBagConstraints.NONE));
+                new CustomConstraints(0, 5, GridBagConstraints.EAST, GridBagConstraints.NONE));
         myJpanel.add(
                 submitButton,
-                new CustomConstraints(1, 4, GridBagConstraints.WEST, GridBagConstraints.NONE));
+                new CustomConstraints(1, 5, GridBagConstraints.WEST, GridBagConstraints.NONE));
 
         add(myJpanel);
     }
@@ -137,6 +151,7 @@ public class NewSprintForm extends JFrame implements BaseComponent {
         String name = nameField.getText();
         String description = descArea.getText();
         Integer length = (Integer) sprintDays.getValue();
+        Integer number = (Integer) numberOfsprints.getValue();
 
         SprintFactory sprintFactory = SprintFactory.getSprintFactory();
 
