@@ -2,13 +2,13 @@ package com.groupesan.project.java.scrumsimulator.mainpackage.state;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 
 import com.groupesan.project.java.scrumsimulator.mainpackage.impl.UserStory;
-import org.junit.jupiter.api.Test;
 
 public class UserStoryStateTest {
 
-    UserStory testUserStory = new UserStory("test", 1.0);
+    UserStory testUserStory = new UserStory("test", 1.0, 0);
 
     @Test
     public void testUserStoryUnselectedState() {

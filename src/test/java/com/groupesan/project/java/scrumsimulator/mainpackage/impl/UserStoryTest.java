@@ -3,10 +3,10 @@ package com.groupesan.project.java.scrumsimulator.mainpackage.impl;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-
-import com.groupesan.project.java.scrumsimulator.mainpackage.core.ScrumIdentifier;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import com.groupesan.project.java.scrumsimulator.mainpackage.core.ScrumIdentifier;
 
 public class UserStoryTest {
     private UserStory myUserStory;
@@ -15,7 +15,7 @@ public class UserStoryTest {
     public void setup() {
         myUserStory =
                 UserStoryFactory.getInstance()
-                        .createNewUserStory("predefinedUS1", "description1", 1.0);
+                        .createNewUserStory("predefinedUS1", "description1", 1.0, 0);
     }
 
     @Test
