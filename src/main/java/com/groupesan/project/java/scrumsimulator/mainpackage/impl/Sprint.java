@@ -11,14 +11,17 @@ public class Sprint {
 
     private int length;
 
+    private int number;
+
     private int remainingDays;
 
     private int id;
 
-    public Sprint(String name, String description, int length, int id) {
+    public Sprint(String name, String description, int length, int number, int id) {
         this.name = name;
         this.description = description;
         this.length = length;
+        this.number = number;
         this.remainingDays = length;
         this.id = id;
     }
@@ -41,6 +44,10 @@ public class Sprint {
 
     public int getLength() {
         return length;
+    }
+
+    public int getNumber() {
+        return number;
     }
 
     public int getDaysRemaining() {

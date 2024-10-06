@@ -155,24 +155,28 @@ public class NewSprintForm extends JFrame implements BaseComponent {
 
         SprintFactory sprintFactory = SprintFactory.getSprintFactory();
 
-        Sprint mySprint = sprintFactory.createNewSprint(name, description, length);
+        for(int i = 0; i<number; i++){
+                Sprint mySprint = sprintFactory.createNewSprint(name, description, length, number);
 
-        int[] selectedIdx = usList.getSelectedIndices();
+                int[] selectedIdx = usList.getSelectedIndices();
 
-        for (int idx : selectedIdx) {
-            String stringIdentifier = listModel.getElementAt(idx);
-            for (UserStory userStory : UserStoryStore.getInstance().getUserStories()) {
-                if (stringIdentifier.equals(userStory.toString())) {
-                    mySprint.addUserStory(userStory);
-                    break;
+                for (int idx : selectedIdx) {
+                String stringIdentifier = listModel.getElementAt(idx);
+                for (UserStory userStory : UserStoryStore.getInstance().getUserStories()) {
+                        if (stringIdentifier.equals(userStory.toString())) {
+                        mySprint.addUserStory(userStory);
+                        break;
+                        }
                 }
-            }
+                }
+
+                SprintStore.getInstance().addSprint(mySprint);
+
+                System.out.println(mySprint);     
         }
 
-        SprintStore.getInstance().addSprint(mySprint);
+        
 
-        System.out.println(mySprint);
-
-        return mySprint;
+        return null;
     }
 }
