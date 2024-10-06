@@ -6,15 +6,10 @@ import java.util.List;
 public class Sprint {
     private ArrayList<UserStory> userStories = new ArrayList<>();
     private String name;
-
     private String description;
-
-    private int length;
-
+    private int length;  // Duration of the sprint
     private int number;
-
     private int remainingDays;
-
     private int id;
 
     public Sprint(String name, String description, int length, int number, int id) {
@@ -38,12 +33,20 @@ public class Sprint {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;  // Setter for name
+    }
+
     public String getDescription() {
         return description;
     }
 
     public int getLength() {
         return length;
+    }
+
+    public void setLength(int length) {
+        this.length = length;  // Setter for length
     }
 
     public int getNumber() {
