@@ -3,6 +3,7 @@ package com.groupesan.project.java.scrumsimulator.mainpackage.ui.panels;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -68,7 +69,27 @@ public class EditSprintForm extends JFrame {
                 new CustomConstraints(0, 4, GridBagConstraints.WEST, 1.0, 0.0, GridBagConstraints.HORIZONTAL));
         panel.add(userStoriesArea,
                 new CustomConstraints(1, 4, GridBagConstraints.WEST, 1.0, 0.0, GridBagConstraints.HORIZONTAL));
+        JButton saveButton = new JButton("Save");
+        saveButton.addActionListener((ActionEvent e) -> {
+            sprint.setName(nameField.getText());
+            sprint.setDescription(descriptionField.getText());
+            sprint.setLength(Integer.parseInt(durationField.getText()));
+            sprint.setNumber(Integer.parseInt(numberOfSprintsField.getText()));
 
+            String[] userStoryNames = userStoriesArea.getText().split(",\\s*");
+            sprint.clearUserStories();
+            for (String name : userStoryNames) {
+                UserStory userStory = new UserStory(name.trim(), 1.0, 1.0);
+                sprint.addUserStory(userStory);
+            }
+
+            dispose();
+        });
+
+        panel.add(saveButton,
+                new CustomConstraints(0, 5, GridBagConstraints.WEST, 1.0, 0.0, GridBagConstraints.HORIZONTAL));
+
+        add(panel);
         
     }
 }
