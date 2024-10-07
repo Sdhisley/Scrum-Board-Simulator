@@ -11,8 +11,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
-
 
 import com.groupesan.project.java.scrumsimulator.mainpackage.impl.Sprint;
 import com.groupesan.project.java.scrumsimulator.mainpackage.impl.SprintStore;
@@ -21,12 +21,11 @@ import com.groupesan.project.java.scrumsimulator.mainpackage.ui.widgets.SprintWi
 import com.groupesan.project.java.scrumsimulator.mainpackage.utils.CustomConstraints;
 
 public class SprintListPane extends JFrame implements BaseComponent {
-    private List<SprintWidget> widgets = new ArrayList<>();
-    private JPanel subPanel; // Moved here to access it in multiple methods
-
     public SprintListPane() {
         this.init();
     }
+
+    private List<SprintWidget> widgets = new ArrayList<>();
 
     @Override
     public void init() {
@@ -43,7 +42,7 @@ public class SprintListPane extends JFrame implements BaseComponent {
             widgets.add(new SprintWidget(sprint));
         }
 
-        subPanel = new JPanel();
+        JPanel subPanel = new JPanel();
         subPanel.setLayout(new GridBagLayout());
         int i = 0;
         for (SprintWidget widget : widgets) {
@@ -71,7 +70,8 @@ public class SprintListPane extends JFrame implements BaseComponent {
             form.addWindowListener(
                     new java.awt.event.WindowAdapter() {
                         @Override
-                        public void windowClosed(java.awt.event.WindowEvent windowEvent) {
+                        public void windowClosed(
+                                java.awt.event.WindowEvent windowEvent) {
                             Sprint newSprint = form.getSprintObject();
                             widgets.add(new SprintWidget(newSprint));
                             int idx = widgets.size() - 1;
@@ -84,68 +84,41 @@ public class SprintListPane extends JFrame implements BaseComponent {
                                             1.0,
                                             0.1,
                                             GridBagConstraints.HORIZONTAL));
-                            subPanel.revalidate();
-                            subPanel.repaint();
                         }
                     });
         });
-        myJpanel.add(
-                newSprintButton,
-                new CustomConstraints(
-                        0, 1, GridBagConstraints.WEST, 1.0, 0.2, GridBagConstraints.HORIZONTAL));
 
-        // Add Edit Button
         JButton editSprintButton = new JButton("Edit Sprint");
         editSprintButton.addActionListener((ActionEvent e) -> {
-            int selectedIndex = getSelectedSprintIndex(); // Implement this method to get the selected index
+            // Get all existing sprints
+            List<Sprint> sprints = SprintStore.getInstance().getSprints();
+            if (sprints.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "No sprints available to edit.");
+                return;
+            }
 
-            if (selectedIndex != -1) {
-                Sprint selectedSprint = SprintStore.getInstance().getSprints().get(selectedIndex); // Adjust based on your data source
-                EditSprintForm form = new EditSprintForm(selectedSprint);
-                form.setVisible(true);
-                
-                form.addWindowListener(
-                        new java.awt.event.WindowAdapter() {
-                            @Override
-                            public void windowClosed(java.awt.event.WindowEvent windowEvent) {
-                                subPanel.removeAll();
-                                widgets.clear();
-                                for (Sprint sprint : SprintStore.getInstance().getSprints()) {
-                                    widgets.add(new SprintWidget(sprint));
-                                }
-                                int i = 0;
-                                for (SprintWidget widget : widgets) {
-                                    subPanel.add(
-                                            widget,
-                                            new CustomConstraints(
-                                                    0,
-                                                    i++,
-                                                    GridBagConstraints.WEST,
-                                                    1.0,
-                                                    0.1,
-                                                    GridBagConstraints.HORIZONTAL));
-                                }
-                                subPanel.revalidate();
-                                subPanel.repaint();
-                            }
-                        });
+            // Create a JList to select the sprint to edit
+            JList<Sprint> sprintList = new JList<>(sprints.toArray(new Sprint[0]));
+            sprintList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+
+            // Show the sprint selection dialog
+            int result = JOptionPane.showConfirmDialog(this, new JScrollPane(sprintList), 
+                    "Select a Sprint to Edit", JOptionPane.OK_CANCEL_OPTION);
+
+            if (result == JOptionPane.OK_OPTION && !sprintList.isSelectionEmpty()) {
+                Sprint selectedSprint = sprintList.getSelectedValue();
+                EditSprintForm editForm = new EditSprintForm(selectedSprint);
+                editForm.setVisible(true);
             } else {
                 JOptionPane.showMessageDialog(this, "Please select a sprint to edit.");
             }
         });
-        
-        myJpanel.add(
-                editSprintButton,
-                new CustomConstraints(
-                        1, 1, GridBagConstraints.WEST, 1.0, 0.2, GridBagConstraints.HORIZONTAL));
+
+        myJpanel.add(newSprintButton,
+                new CustomConstraints(0, 1, GridBagConstraints.WEST, 1.0, 0.2, GridBagConstraints.HORIZONTAL));
+        myJpanel.add(editSprintButton,
+                new CustomConstraints(0, 2, GridBagConstraints.WEST, 1.0, 0.2, GridBagConstraints.HORIZONTAL));
 
         add(myJpanel);
-    }
-
-   
-    private int getSelectedSprintIndex() {
-        // Logic to determine selected index. This could be from a list, selection model, etc.
-        // Placeholder for now; you should replace this with your actual selection logic.
-        return -1; // Return -1 if no sprint is selected
     }
 }
