@@ -12,12 +12,12 @@ import javax.swing.JPanel;
 
 public class UserStoryWidget extends JPanel implements BaseComponent {
 
-    private JLabel id;
-    private JLabel points;
-    private JLabel name;
-    private JLabel desc;
-
-    // Marking userStory as transient to avoid serialization issues
+    JLabel id;
+    JLabel points;
+    JLabel name;
+    JLabel desc;
+    JLabel businessValue;
+    
     private transient UserStory userStory;
 
     public UserStoryWidget(UserStory userStory) {
@@ -32,6 +32,7 @@ public class UserStoryWidget extends JPanel implements BaseComponent {
         points = createLabel(Double.toString(userStory.getPointValue()));
         name = createLabel(userStory.getName());
         desc = createLabel(userStory.getDescription());
+        businessValue = createLabel(Double.toString(userStory.getBusinessValue()));
 
         GridBagLayout myGridBagLayout = new GridBagLayout();
         setLayout(myGridBagLayout);
@@ -40,6 +41,7 @@ public class UserStoryWidget extends JPanel implements BaseComponent {
         add(points, new CustomConstraints(1, 0, GridBagConstraints.WEST, 0.1, 0.0, GridBagConstraints.HORIZONTAL));
         add(name, new CustomConstraints(2, 0, GridBagConstraints.WEST, 0.2, 0.0, GridBagConstraints.HORIZONTAL));
         add(desc, new CustomConstraints(3, 0, GridBagConstraints.WEST, 0.7, 0.0, GridBagConstraints.HORIZONTAL));
+        add(businessValue, new CustomConstraints(4, 0, GridBagConstraints.WEST, 0.1, 0.0, GridBagConstraints.HORIZONTAL));
     }
 
     private JLabel createLabel(String text) {
@@ -66,10 +68,10 @@ public class UserStoryWidget extends JPanel implements BaseComponent {
     }
 
     private void updateUserStoryDetails() {
-        // Reinitialize the labels with updated userStory details
         id.setText(userStory.getId().toString());
         points.setText(Double.toString(userStory.getPointValue()));
         name.setText(userStory.getName());
         desc.setText(userStory.getDescription());
+        businessValue.setText(Double.toString(userStory.getBusinessValue())); 
     }
 }
