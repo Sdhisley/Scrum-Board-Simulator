@@ -7,7 +7,7 @@ public class Sprint {
     private ArrayList<UserStory> userStories = new ArrayList<>();
     private String name;
     private String description;
-    private int length;  // Duration of the sprint
+    private int length;
     private int number;
     private int remainingDays;
     private int id;
@@ -25,8 +25,23 @@ public class Sprint {
         userStories.add(us);
     }
 
+    public void clearUserStories() {
+        userStories.clear();
+    }
+
     public List<UserStory> getUserStories() {
         return new ArrayList<>(userStories);
+    }
+
+    public String getUserStoriesAsString() {
+        StringBuilder sb = new StringBuilder();
+        for (UserStory us : userStories) {
+            sb.append(us.getName()).append(", ");
+        }
+        if (sb.length() > 0) {
+            sb.setLength(sb.length() - 2);
+        }
+        return sb.toString();
     }
 
     public String getName() {
@@ -34,11 +49,15 @@ public class Sprint {
     }
 
     public void setName(String name) {
-        this.name = name;  // Setter for name
+        this.name = name;
     }
 
     public String getDescription() {
         return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public int getLength() {
@@ -46,11 +65,15 @@ public class Sprint {
     }
 
     public void setLength(int length) {
-        this.length = length;  // Setter for length
+        this.length = length;
     }
 
     public int getNumber() {
         return number;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
     }
 
     public int getDaysRemaining() {
@@ -65,6 +88,7 @@ public class Sprint {
         return id;
     }
 
+    @Override
     public String toString() {
         String header = "Sprint " + this.id + ": " + this.name + "\n";
         StringBuilder USes = new StringBuilder();
