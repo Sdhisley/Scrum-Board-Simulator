@@ -11,6 +11,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
 
 import com.groupesan.project.java.scrumsimulator.mainpackage.impl.Sprint;
 import com.groupesan.project.java.scrumsimulator.mainpackage.impl.SprintStore;
@@ -35,11 +37,6 @@ public class SprintListPane extends JFrame implements BaseComponent {
         JPanel myJpanel = new JPanel();
         myJpanel.setBorder(new EmptyBorder(10, 10, 10, 10));
         myJpanel.setLayout(myGridbagLayout);
-
-        // Sprint aSprint = SprintFactory.getSprintFactory().createNewSprint("foo", "bar", 2, 2);
-        // Sprint aSprint2 = SprintFactory.getSprintFactory().createNewSprint("foo2", "bar2", 4, 5);
-        // widgets.add(new SprintWidget(aSprint));
-        // widgets.add(new SprintWidget(aSprint2));
 
         for (Sprint sprint : SprintStore.getInstance().getSprints()) {
             widgets.add(new SprintWidget(sprint));
@@ -90,10 +87,37 @@ public class SprintListPane extends JFrame implements BaseComponent {
                         }
                     });
         });
-        myJpanel.add(
-                newSprintButton,
-                new CustomConstraints(
-                        0, 1, GridBagConstraints.WEST, 1.0, 0.2, GridBagConstraints.HORIZONTAL));
+
+        JButton editSprintButton = new JButton("Edit Sprint");
+        editSprintButton.addActionListener((ActionEvent e) -> {
+            // Get all existing sprints
+            List<Sprint> sprints = SprintStore.getInstance().getSprints();
+            if (sprints.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "No sprints available to edit.");
+                return;
+            }
+
+            // Create a JList to select the sprint to edit
+            JList<Sprint> sprintList = new JList<>(sprints.toArray(new Sprint[0]));
+            sprintList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+
+            // Show the sprint selection dialog
+            int result = JOptionPane.showConfirmDialog(this, new JScrollPane(sprintList), 
+                    "Select a Sprint to Edit", JOptionPane.OK_CANCEL_OPTION);
+
+            if (result == JOptionPane.OK_OPTION && !sprintList.isSelectionEmpty()) {
+                Sprint selectedSprint = sprintList.getSelectedValue();
+                EditSprintForm editForm = new EditSprintForm(selectedSprint);
+                editForm.setVisible(true);
+            } else {
+                JOptionPane.showMessageDialog(this, "Please select a sprint to edit.");
+            }
+        });
+
+        myJpanel.add(newSprintButton,
+                new CustomConstraints(0, 1, GridBagConstraints.WEST, 1.0, 0.2, GridBagConstraints.HORIZONTAL));
+        myJpanel.add(editSprintButton,
+                new CustomConstraints(0, 2, GridBagConstraints.WEST, 1.0, 0.2, GridBagConstraints.HORIZONTAL));
 
         add(myJpanel);
     }

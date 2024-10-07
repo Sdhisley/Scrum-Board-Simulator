@@ -5,7 +5,6 @@ import com.groupesan.project.java.scrumsimulator.mainpackage.ui.panels.EditUserS
 import com.groupesan.project.java.scrumsimulator.mainpackage.utils.CustomConstraints;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JLabel;
@@ -18,72 +17,61 @@ public class UserStoryWidget extends JPanel implements BaseComponent {
     JLabel name;
     JLabel desc;
     JLabel businessValue;
-
-    // TODO: This is a non transient field and this class is supposed to be serializable. this needs
-    // to be dealt with before this object can be serialized
-    private UserStory userStory;
-
-    ActionListener actionListener = e -> {};
-
-    MouseAdapter openEditDialog =
-            new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    EditUserStoryForm form = new EditUserStoryForm(userStory);
-                    form.setVisible(true);
-
-                    form.addWindowListener(
-                            new java.awt.event.WindowAdapter() {
-                                public void windowClosed(java.awt.event.WindowEvent windowEvent) {
-                                    init();
-                                }
-                            });
-                }
-            };
+    
+    private transient UserStory userStory;
 
     public UserStoryWidget(UserStory userStory) {
         this.userStory = userStory;
-
         this.init();
     }
 
     public void init() {
         removeAll();
 
-        id = new JLabel(userStory.getId().toString());
-        id.addMouseListener(openEditDialog);
-        points = new JLabel(Double.toString(userStory.getPointValue()));
-        points.addMouseListener(openEditDialog);
-        name = new JLabel(userStory.getName());
-        name.addMouseListener(openEditDialog);
-        desc = new JLabel(userStory.getDescription());
-        desc.addMouseListener(openEditDialog);
-        businessValue = new JLabel(Double.toString(userStory.getBusinessValue())); // Business Value label
-        businessValue.addMouseListener(openEditDialog);
+        id = createLabel(userStory.getId().toString());
+        points = createLabel(Double.toString(userStory.getPointValue()));
+        name = createLabel(userStory.getName());
+        desc = createLabel(userStory.getDescription());
+        businessValue = createLabel(Double.toString(userStory.getBusinessValue()));
 
         GridBagLayout myGridBagLayout = new GridBagLayout();
-
         setLayout(myGridBagLayout);
 
-        add(
-                id,
-                new CustomConstraints(
-                        0, 0, GridBagConstraints.WEST, 0.1, 0.0, GridBagConstraints.HORIZONTAL));
-        add(
-                points,
-                new CustomConstraints(
-                        1, 0, GridBagConstraints.WEST, 0.1, 0.0, GridBagConstraints.HORIZONTAL));
-        add(
-                name,
-                new CustomConstraints(
-                        2, 0, GridBagConstraints.WEST, 0.2, 0.0, GridBagConstraints.HORIZONTAL));
-        add(
-                desc,
-                new CustomConstraints(
-                        3, 0, GridBagConstraints.WEST, 0.7, 0.0, GridBagConstraints.HORIZONTAL));
-                        add(
-                            businessValue,
-                            new CustomConstraints(
-                                    4, 0, GridBagConstraints.WEST, 0.1, 0.0, GridBagConstraints.HORIZONTAL)); 
+        add(id, new CustomConstraints(0, 0, GridBagConstraints.WEST, 0.1, 0.0, GridBagConstraints.HORIZONTAL));
+        add(points, new CustomConstraints(1, 0, GridBagConstraints.WEST, 0.1, 0.0, GridBagConstraints.HORIZONTAL));
+        add(name, new CustomConstraints(2, 0, GridBagConstraints.WEST, 0.2, 0.0, GridBagConstraints.HORIZONTAL));
+        add(desc, new CustomConstraints(3, 0, GridBagConstraints.WEST, 0.7, 0.0, GridBagConstraints.HORIZONTAL));
+        add(businessValue, new CustomConstraints(4, 0, GridBagConstraints.WEST, 0.1, 0.0, GridBagConstraints.HORIZONTAL));
+    }
+
+    private JLabel createLabel(String text) {
+        JLabel label = new JLabel(text);
+        label.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                openEditDialog();
+            }
+        });
+        return label;
+    }
+
+    private void openEditDialog() {
+        EditUserStoryForm form = new EditUserStoryForm(userStory);
+        form.setVisible(true);
+
+        form.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosed(java.awt.event.WindowEvent windowEvent) {
+                updateUserStoryDetails();
+            }
+        });
+    }
+
+    private void updateUserStoryDetails() {
+        id.setText(userStory.getId().toString());
+        points.setText(Double.toString(userStory.getPointValue()));
+        name.setText(userStory.getName());
+        desc.setText(userStory.getDescription());
+        businessValue.setText(Double.toString(userStory.getBusinessValue())); 
     }
 }
