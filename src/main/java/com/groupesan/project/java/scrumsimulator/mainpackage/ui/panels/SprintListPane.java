@@ -142,7 +142,7 @@ public class SprintListPane extends JFrame implements BaseComponent {
         add(myJpanel);
     }
 
-    // This method should implement logic to get the currently selected sprint index
+   
     private int getSelectedSprintIndex() {
         // Logic to determine selected index. This could be from a list, selection model, etc.
         // Placeholder for now; you should replace this with your actual selection logic.
