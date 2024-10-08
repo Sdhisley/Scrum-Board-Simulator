@@ -49,6 +49,8 @@ public class EditUserStoryForm extends JFrame implements BaseComponent {
         descArea = new JTextArea(userStory.getDescription());
         pointsCombo = new JComboBox<>(pointsList);
         pointsCombo.setSelectedItem(userStory.getPointValue());
+        bvCombo = new JComboBox<>(bvList);
+        bvCombo.setSelectedItem(userStory.getBusinessValue());
 
         GridBagLayout myGridbagLayout = new GridBagLayout();
         JPanel myJpanel = new JPanel();
@@ -117,10 +119,11 @@ public class EditUserStoryForm extends JFrame implements BaseComponent {
                         String name = nameField.getText();
                         String description = descArea.getText();
                         Double points = (Double) pointsCombo.getSelectedItem();
-
+                        Double businessValue = (Double) bvCombo.getSelectedItem();
                         userStory.setName(name);
                         userStory.setDescription(description);
                         userStory.setPointValue(points);
+                        userStory.setBusinessValue(businessValue);
                         dispose();
                     }
                 });
