@@ -19,7 +19,7 @@ public class UserStory extends ScrumObject {
     private String assignStatus;
     private UserStoryState state;
     private Player owner;
-    private String isAssgined = "N";
+    private String isAssgined;
 
     public UserStory(String name, double pointValue, double businessValue, String assignStatus) {
         this.name = name;
@@ -78,7 +78,7 @@ public class UserStory extends ScrumObject {
         this.assignStatus = assignStatus;
     }
 
-    public String getAsiignStatus(){
+    public String getAssignStatus(){
         return assignStatus;
     }
 
@@ -125,10 +125,5 @@ public class UserStory extends ScrumObject {
     public String getIsAssigned(){
         return isAssgined;
     }
-    public void assign(){
-        this.isAssgined = "Y";
-    }
-    public void unassign(){
-        this.isAssgined = "N";
-    }
+
 }

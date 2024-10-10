@@ -36,7 +36,7 @@ public class UserStoryWidget extends JPanel implements BaseComponent {
         name = createLabel(userStory.getName());
         desc = createLabel(userStory.getDescription());
         businessValue = createLabel(Double.toString(userStory.getBusinessValue()));
-        isAssigned = createLabel(userStory.getIsAssigned()); 
+        isAssigned = createLabel(userStory.getAssignStatus()); 
 
         GridBagLayout myGridBagLayout = new GridBagLayout();
         setLayout(myGridBagLayout);
@@ -78,6 +78,6 @@ public class UserStoryWidget extends JPanel implements BaseComponent {
         name.setText(userStory.getName());
         desc.setText(userStory.getDescription());
         businessValue.setText(Double.toString(userStory.getBusinessValue())); 
-        isAssigned.setText(userStory.getIsAssigned());
+        isAssigned.setText(userStory.getAssignStatus());
     }
 }

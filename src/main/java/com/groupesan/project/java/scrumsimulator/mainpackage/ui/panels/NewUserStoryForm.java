@@ -128,12 +128,13 @@ public class NewUserStoryForm extends JFrame implements BaseComponent {
         String description = descArea.getText();
         Double points = (Double) pointsCombo.getSelectedItem();
         Double businessValue = (Double) bvCombo.getSelectedItem();
-        String assignedStatus = "Unassigned";
+        String status = "Unassigned";
+        
 
         UserStoryFactory userStoryFactory = UserStoryFactory.getInstance();
 
-        UserStory userStory = userStoryFactory.createNewUserStory(name, description, points, businessValue, assignedStatus);
-
+        UserStory userStory = userStoryFactory.createNewUserStory(name, description, points, businessValue, status);
+        userStory.setAssignStatus(status);
         userStory.doRegister();
 
         System.out.println(userStory);
