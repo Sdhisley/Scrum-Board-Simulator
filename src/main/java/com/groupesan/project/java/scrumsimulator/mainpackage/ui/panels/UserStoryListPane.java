@@ -7,7 +7,7 @@ import com.groupesan.project.java.scrumsimulator.mainpackage.ui.widgets.UserStor
 import com.groupesan.project.java.scrumsimulator.mainpackage.utils.CustomConstraints;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder; 
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -25,25 +25,23 @@ public class UserStoryListPane extends JFrame implements BaseComponent {
     public void init() {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setTitle("User Story List");
-        setSize(400, 300);
+        setSize(500, 300);
 
         GridBagLayout myGridbagLayout = new GridBagLayout();
         JPanel myJpanel = new JPanel();
         myJpanel.setBorder(new EmptyBorder(10, 10, 10, 10));
         myJpanel.setLayout(myGridbagLayout);
 
-        
         for (UserStory userStory : UserStoryStore.getInstance().getUserStories()) {
             widgets.add(new UserStoryWidget(userStory));
         }
 
-        
         JPanel subPanel = new JPanel();
         subPanel.setLayout(new GridBagLayout());
         int i = 0;
 
-        
         for (UserStoryWidget widget : widgets) {
+            widget.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5)); // Reduced padding around each widget
             subPanel.add(
                 widget,
                 new CustomConstraints(
@@ -66,8 +64,8 @@ public class UserStoryListPane extends JFrame implements BaseComponent {
                 0, 0, GridBagConstraints.WEST, 1.0, 0.8, GridBagConstraints.BOTH)
         );
 
-        JButton newSprintButton = new JButton("New User Story");
-        newSprintButton.addActionListener(new ActionListener() {
+        JButton newUserStoryButton = new JButton("New User Story");
+        newUserStoryButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 NewUserStoryForm form = new NewUserStoryForm();
@@ -78,6 +76,7 @@ public class UserStoryListPane extends JFrame implements BaseComponent {
                         UserStory userStory = form.getUserStoryObject();
                         UserStoryStore.getInstance().addUserStory(userStory);
                         UserStoryWidget newWidget = new UserStoryWidget(userStory);
+                        newWidget.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5)); 
                         widgets.add(newWidget);
 
                         subPanel.add(newWidget, new CustomConstraints(
@@ -85,7 +84,7 @@ public class UserStoryListPane extends JFrame implements BaseComponent {
                             widgets.size() - 1,
                             GridBagConstraints.WEST,
                             1.0,
-                            0.05, 
+                            0.05,
                             GridBagConstraints.HORIZONTAL)
                         );
 
@@ -97,7 +96,7 @@ public class UserStoryListPane extends JFrame implements BaseComponent {
         });
 
         myJpanel.add(
-            newSprintButton,
+            newUserStoryButton,
             new CustomConstraints(
                 0, 1, GridBagConstraints.WEST, 1.0, 0.2, GridBagConstraints.HORIZONTAL)
         );
