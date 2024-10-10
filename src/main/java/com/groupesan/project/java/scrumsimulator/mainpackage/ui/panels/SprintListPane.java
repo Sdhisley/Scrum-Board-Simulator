@@ -3,9 +3,9 @@ package com.groupesan.project.java.scrumsimulator.mainpackage.ui.panels;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -16,36 +16,48 @@ import javax.swing.JOptionPane;
 
 import com.groupesan.project.java.scrumsimulator.mainpackage.impl.Sprint;
 import com.groupesan.project.java.scrumsimulator.mainpackage.impl.SprintStore;
+import com.groupesan.project.java.scrumsimulator.mainpackage.impl.UserStory;
 import com.groupesan.project.java.scrumsimulator.mainpackage.ui.widgets.BaseComponent;
 import com.groupesan.project.java.scrumsimulator.mainpackage.ui.widgets.SprintWidget;
 import com.groupesan.project.java.scrumsimulator.mainpackage.utils.CustomConstraints;
 
 public class SprintListPane extends JFrame implements BaseComponent {
+
+    private List<SprintWidget> widgets = new ArrayList<>();
+    private JPanel subPanel;
+
     public SprintListPane() {
         this.init();
     }
-
-    private List<SprintWidget> widgets = new ArrayList<>();
 
     @Override
     public void init() {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setTitle("Sprints list");
-        setSize(400, 300);
+        setSize(600, 400);  // Adjusted size to accommodate more details
 
         GridBagLayout myGridbagLayout = new GridBagLayout();
         JPanel myJpanel = new JPanel();
         myJpanel.setBorder(new EmptyBorder(10, 10, 10, 10));
         myJpanel.setLayout(myGridbagLayout);
 
-        for (Sprint sprint : SprintStore.getInstance().getSprints()) {
-            widgets.add(new SprintWidget(sprint));
-        }
-
-        JPanel subPanel = new JPanel();
+        subPanel = new JPanel();
         subPanel.setLayout(new GridBagLayout());
+
+        // Populate sprint widgets
         int i = 0;
-        for (SprintWidget widget : widgets) {
+        for (Sprint sprint : SprintStore.getInstance().getSprints()) {
+            SprintWidget widget = new SprintWidget(sprint);
+            widgets.add(widget);
+
+            // Add listener to display sprint details including user stories
+            widget.addViewDetailsButtonListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    displaySprintDetails(sprint);
+                }
+            });
+
             subPanel.add(
                     widget,
                     new CustomConstraints(
@@ -57,26 +69,30 @@ public class SprintListPane extends JFrame implements BaseComponent {
                             GridBagConstraints.HORIZONTAL));
         }
 
+        // Add scroll pane for the sprint list
         myJpanel.add(
                 new JScrollPane(subPanel),
                 new CustomConstraints(
-                        0, 0, GridBagConstraints.WEST, 1.0, 0.8, GridBagConstraints.HORIZONTAL));
+                        0, 0, GridBagConstraints.WEST, 1.0, 0.8, GridBagConstraints.BOTH));
 
+        // New Sprint Button
         JButton newSprintButton = new JButton("New Sprint");
         newSprintButton.addActionListener((ActionEvent e) -> {
             NewSprintForm form = new NewSprintForm();
             form.setVisible(true);
-            
+
             form.addWindowListener(
                     new java.awt.event.WindowAdapter() {
                         @Override
                         public void windowClosed(
                                 java.awt.event.WindowEvent windowEvent) {
                             Sprint newSprint = form.getSprintObject();
-                            widgets.add(new SprintWidget(newSprint));
+                            SprintWidget newWidget = new SprintWidget(newSprint);
+
+                            widgets.add(newWidget);
                             int idx = widgets.size() - 1;
                             subPanel.add(
-                                    widgets.get(idx),
+                                    newWidget,
                                     new CustomConstraints(
                                             0,
                                             idx,
@@ -84,13 +100,17 @@ public class SprintListPane extends JFrame implements BaseComponent {
                                             1.0,
                                             0.1,
                                             GridBagConstraints.HORIZONTAL));
+
+                            // Repaint and revalidate the panel to reflect the new sprint
+                            subPanel.revalidate();
+                            subPanel.repaint();
                         }
                     });
         });
 
+        // Edit Sprint Button
         JButton editSprintButton = new JButton("Edit Sprint");
         editSprintButton.addActionListener((ActionEvent e) -> {
-            // Get all existing sprints
             List<Sprint> sprints = SprintStore.getInstance().getSprints();
             if (sprints.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "No sprints available to edit.");
@@ -114,11 +134,34 @@ public class SprintListPane extends JFrame implements BaseComponent {
             }
         });
 
+        // Add buttons to the panel
         myJpanel.add(newSprintButton,
                 new CustomConstraints(0, 1, GridBagConstraints.WEST, 1.0, 0.2, GridBagConstraints.HORIZONTAL));
         myJpanel.add(editSprintButton,
                 new CustomConstraints(0, 2, GridBagConstraints.WEST, 1.0, 0.2, GridBagConstraints.HORIZONTAL));
 
         add(myJpanel);
+    }
+
+    /**
+     * Displays the detailed information of a sprint, including its user stories.
+     */
+    private void displaySprintDetails(Sprint sprint) {
+        StringBuilder details = new StringBuilder();
+        details.append("Sprint ID: ").append(sprint.getId()).append("\n")
+               .append("Name: ").append(sprint.getName()).append("\n")
+               .append("Description: ").append(sprint.getDescription()).append("\n")
+               .append("Length: ").append(sprint.getLength()).append(" days\n")
+               .append("Remaining: ").append(sprint.getDaysRemaining()).append(" days\n")
+               .append("Number of User Stories: ").append(sprint.getUserStories().size()).append("\n");
+
+
+        details.append("\nUser Stories:\n");
+        for (UserStory userStory : sprint.getUserStories()) {
+            details.append("- ").append(userStory.getName())
+                   .append(" (").append(userStory.getPointValue()).append(" points)\n");
+        }
+
+        JOptionPane.showMessageDialog(this, details.toString(), "Sprint Details", JOptionPane.INFORMATION_MESSAGE);
     }
 }
