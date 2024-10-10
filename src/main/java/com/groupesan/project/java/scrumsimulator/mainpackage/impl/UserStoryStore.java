@@ -31,4 +31,13 @@ public class UserStoryStore {
     public List<UserStory> getUserStories() {
         return new ArrayList<>(userStories);
     }
+      public void updateUserStory(UserStory updatedUserStory) {
+        for (int i = 0; i < userStories.size(); i++) {
+            UserStory story = userStories.get(i);
+            if (story.getId() == updatedUserStory.getId()) {  // Assuming 'getId()' exists in UserStory class
+                userStories.set(i, updatedUserStory);
+                break;
+            }
+        }
+    }
 }

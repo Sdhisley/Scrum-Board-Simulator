@@ -1,13 +1,20 @@
 package com.groupesan.project.java.scrumsimulator.mainpackage.ui.panels;
 
-import com.groupesan.project.java.scrumsimulator.mainpackage.impl.UserStory;
-import com.groupesan.project.java.scrumsimulator.mainpackage.impl.UserStoryStore;
-import com.groupesan.project.java.scrumsimulator.mainpackage.state.UserStoryStateManager;
-
-import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
+
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+
+import com.groupesan.project.java.scrumsimulator.mainpackage.impl.UserStory;
+import com.groupesan.project.java.scrumsimulator.mainpackage.impl.UserStoryStore;
+import com.groupesan.project.java.scrumsimulator.mainpackage.state.UserStoryStateManager;
 
 public class UpdateUserStoryPanel extends JFrame {
 
@@ -59,7 +66,11 @@ public class UpdateUserStoryPanel extends JFrame {
                 UserStory selectedUserStory = (UserStory) userStoryComboBox.getSelectedItem();
                 String selectedStatus = (String) statusComboBox.getSelectedItem();
 
-                if (selectedUserStory != null && selectedStatus != null) {
+                 if (selectedUserStory != null && selectedStatus != null) {
+                    // Update the status of the selected user story
+                    selectedUserStory.setStatus(selectedStatus);
+
+                    // Optionally: Call UserStoryStateManager if you need to manage transitions
                     UserStoryStateManager.updateUserStoryStatus(
                             selectedUserStory.getDescription(), selectedStatus);
                     JOptionPane.showMessageDialog(null, "Status updated successfully!");
