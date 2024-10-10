@@ -79,7 +79,7 @@ public class EditSprintForm extends JFrame {
             String[] userStoryNames = userStoriesArea.getText().split(",\\s*");
             sprint.clearUserStories();
             for (String name : userStoryNames) {
-                UserStory userStory = new UserStory(name.trim(), 1.0, 1.0);
+                UserStory userStory = new UserStory(name.trim(), 1.0, 1.0, "Assigned");
                 sprint.addUserStory(userStory);
             }
 

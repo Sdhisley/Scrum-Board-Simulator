@@ -8,7 +8,7 @@ import com.groupesan.project.java.scrumsimulator.mainpackage.impl.UserStory;
 
 public class UserStoryStateTest {
 
-    UserStory testUserStory = new UserStory("test", 1.0, 0);
+    UserStory testUserStory = new UserStory("test", 1.0, 0, "Unassigned");
 
     @Test
     public void testUserStoryUnselectedState() {

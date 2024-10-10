@@ -21,6 +21,7 @@ public class UserStoryListPane extends JFrame implements BaseComponent {
 
     private List<UserStoryWidget> widgets = new ArrayList<>();
 
+    @Override
     public void init() {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setTitle("User Story List");

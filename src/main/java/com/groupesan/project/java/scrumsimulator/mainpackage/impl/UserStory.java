@@ -16,22 +16,25 @@ public class UserStory extends ScrumObject {
     private String description;
     private double pointValue;
     private double businessValue;
+    private String assignStatus;
     private UserStoryState state;
     private Player owner;
 
-    public UserStory(String name, double pointValue, double businessValue) {
+    public UserStory(String name, double pointValue, double businessValue, String assignStatus) {
         this.name = name;
         this.description = "";
         this.pointValue = pointValue;
         this.businessValue = businessValue;
+        this.assignStatus = assignStatus;
         this.state = new UserStoryUnselectedState(this);
     }
 
-    public UserStory(String name, String description, double pointValue, double businessValue) {
+    public UserStory(String name, String description, double pointValue, double businessValue, String assignStatus) {
         this.name = name;
         this.description = description;
         this.pointValue = pointValue;
         this.businessValue = businessValue;
+        this.assignStatus = assignStatus;
         this.state = new UserStoryUnselectedState(this);
     }
 
@@ -68,6 +71,14 @@ public class UserStory extends ScrumObject {
 
     public double getBusinessValue() {
         return businessValue;
+    }
+
+    public void setAssignStatus(String assignStatus){
+        this.assignStatus = assignStatus;
+    }
+
+    public String getAsiignStatus(){
+        return assignStatus;
     }
 
     public double getPointValue() {
