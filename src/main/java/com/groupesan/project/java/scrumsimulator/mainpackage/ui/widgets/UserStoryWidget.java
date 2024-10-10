@@ -14,13 +14,14 @@ import com.groupesan.project.java.scrumsimulator.mainpackage.utils.CustomConstra
 
 public class UserStoryWidget extends JPanel implements BaseComponent {
 
-    JLabel id;
-    JLabel points;
-    JLabel name;
-    JLabel desc;
-    JLabel businessValue;
-    JLabel isAssigned;
-    
+    private JLabel id;
+    private JLabel points;
+    private JLabel name;
+    private JLabel desc;
+    private JLabel businessValue;
+    private JLabel isAssigned;
+    private JLabel status;
+
     private transient UserStory userStory;
 
     public UserStoryWidget(UserStory userStory) {
@@ -36,10 +37,11 @@ public class UserStoryWidget extends JPanel implements BaseComponent {
         name = createLabel(userStory.getName());
         desc = createLabel(userStory.getDescription());
         businessValue = createLabel(Double.toString(userStory.getBusinessValue()));
-        isAssigned = createLabel(userStory.getAssignStatus()); 
+        isAssigned = createLabel(userStory.getAssignStatus());
+        status = createLabel(userStory.getStatus());
 
-        GridBagLayout myGridBagLayout = new GridBagLayout();
-        setLayout(myGridBagLayout);
+        GridBagLayout layout = new GridBagLayout();
+        setLayout(layout);
 
         add(id, new CustomConstraints(0, 0, GridBagConstraints.WEST, 0.1, 0.0, GridBagConstraints.HORIZONTAL));
         add(points, new CustomConstraints(1, 0, GridBagConstraints.WEST, 0.1, 0.0, GridBagConstraints.HORIZONTAL));
@@ -47,6 +49,7 @@ public class UserStoryWidget extends JPanel implements BaseComponent {
         add(desc, new CustomConstraints(3, 0, GridBagConstraints.WEST, 0.7, 0.0, GridBagConstraints.HORIZONTAL));
         add(businessValue, new CustomConstraints(4, 0, GridBagConstraints.WEST, 0.1, 0.0, GridBagConstraints.HORIZONTAL));
         add(isAssigned, new CustomConstraints(5, 0, GridBagConstraints.WEST, 0.1, 0.0, GridBagConstraints.HORIZONTAL));
+        add(status, new CustomConstraints(6, 0, GridBagConstraints.WEST, 0.1, 0.0, GridBagConstraints.HORIZONTAL));
     }
 
     private JLabel createLabel(String text) {
@@ -67,17 +70,17 @@ public class UserStoryWidget extends JPanel implements BaseComponent {
         form.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosed(java.awt.event.WindowEvent windowEvent) {
-                updateUserStoryDetails();
+                UserStoryWidget.this.updateUserStoryDetails();
             }
         });
     }
-
     private void updateUserStoryDetails() {
         id.setText(userStory.getId().toString());
         points.setText(Double.toString(userStory.getPointValue()));
         name.setText(userStory.getName());
         desc.setText(userStory.getDescription());
-        businessValue.setText(Double.toString(userStory.getBusinessValue())); 
+        businessValue.setText(Double.toString(userStory.getBusinessValue()));
         isAssigned.setText(userStory.getAssignStatus());
+        status.setText(userStory.getStatus());
     }
 }

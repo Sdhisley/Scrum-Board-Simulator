@@ -17,26 +17,25 @@ public class UserStory extends ScrumObject {
     private double pointValue;
     private double businessValue;
     private String assignStatus;
+    private String isAssigned;
+    private String status;
     private UserStoryState state;
     private Player owner;
-    private String isAssgined;
 
+    // Constructor with only essential parameters
     public UserStory(String name, double pointValue, double businessValue, String assignStatus) {
-        this.name = name;
-        this.description = "";
-        this.pointValue = pointValue;
-        this.businessValue = businessValue;
-        this.assignStatus = assignStatus;
-        this.state = new UserStoryUnselectedState(this);
+        this(name, "", pointValue, businessValue, assignStatus, "New"); // Default to "New" status
     }
 
-    public UserStory(String name, String description, double pointValue, double businessValue, String assignStatus) {
+    // Full constructor with all fields
+    public UserStory(String name, String description, double pointValue, double businessValue, String assignStatus, String status) {
         this.name = name;
         this.description = description;
         this.pointValue = pointValue;
         this.businessValue = businessValue;
         this.assignStatus = assignStatus;
-        this.state = new UserStoryUnselectedState(this);
+        this.status = status;
+        this.state = new UserStoryUnselectedState(this); // Default state
     }
 
     protected void register() {
@@ -66,22 +65,6 @@ public class UserStory extends ScrumObject {
         this.description = description;
     }
 
-    public void setBusinessValue(double businessValue) {
-        this.businessValue = businessValue;
-    }
-
-    public double getBusinessValue() {
-        return businessValue;
-    }
-
-    public void setAssignStatus(String assignStatus){
-        this.assignStatus = assignStatus;
-    }
-
-    public String getAssignStatus(){
-        return assignStatus;
-    }
-
     public double getPointValue() {
         return pointValue;
     }
@@ -90,16 +73,36 @@ public class UserStory extends ScrumObject {
         this.pointValue = pointValue;
     }
 
-    public List<ScrumObject> getChildren() {
-        return new ArrayList<>();
+    public double getBusinessValue() {
+        return businessValue;
     }
 
-    @Override
-    public String toString() {
-        if (isRegistered()) {
-            return this.getId().toString() + " - " + name;
-        }
-        return "(unregistered) - " + getName();
+    public void setBusinessValue(double businessValue) {
+        this.businessValue = businessValue;
+    }
+
+    public String getAssignStatus() {
+        return assignStatus;
+    }
+
+    public void setAssignStatus(String assignStatus) {
+        this.assignStatus = assignStatus;
+    }
+
+    public String getIsAssigned() {
+        return isAssigned;
+    }
+
+    public void setIsAssigned(String isAssigned) {
+        this.isAssigned = isAssigned;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public void changeState(UserStoryState state) {
@@ -122,8 +125,16 @@ public class UserStory extends ScrumObject {
     public Player getOwner() {
         return this.owner;
     }
-    public String getIsAssigned(){
-        return isAssgined;
+
+    public List<ScrumObject> getChildren() {
+        return new ArrayList<>();
     }
 
+    @Override
+    public String toString() {
+        if (isRegistered()) {
+            return this.getId().toString() + " - " + name;
+        }
+        return "(unregistered) - " + getName();
+    }
 }
