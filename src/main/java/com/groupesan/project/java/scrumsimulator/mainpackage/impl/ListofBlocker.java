@@ -5,6 +5,7 @@ public class ListofBlocker {
     public enum BlockerType {
         TIME_BLOCKER,
         TECHNICAL_DEBT,
+        PEOPLE_BLOCKER,
         NEEDS_MORE_INFO,
         REQUIREMENTS_ISSUE
     }
