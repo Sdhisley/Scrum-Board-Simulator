@@ -1,14 +1,14 @@
 package com.groupesan.project.java.scrumsimulator.mainpackage.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.groupesan.project.java.scrumsimulator.mainpackage.core.Player;
 import com.groupesan.project.java.scrumsimulator.mainpackage.core.ScrumIdentifier;
 import com.groupesan.project.java.scrumsimulator.mainpackage.core.ScrumObject;
 import com.groupesan.project.java.scrumsimulator.mainpackage.state.UserStoryDeletedState;
 import com.groupesan.project.java.scrumsimulator.mainpackage.state.UserStoryState;
 import com.groupesan.project.java.scrumsimulator.mainpackage.state.UserStoryUnselectedState;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserStory extends ScrumObject {
     private UserStoryIdentifier id;
@@ -36,6 +36,7 @@ public class UserStory extends ScrumObject {
         this.assignStatus = assignStatus;
         this.status = status;
         this.state = new UserStoryUnselectedState(this); // Default state
+        register();
     }
 
     protected void register() {
@@ -49,6 +50,10 @@ public class UserStory extends ScrumObject {
         return id;
     }
 
+    public boolean isRegistered() {
+        return id != null;
+    }
+
     public String getName() {
         return name;
     }
@@ -57,6 +62,7 @@ public class UserStory extends ScrumObject {
         this.name = name;
     }
 
+    // Additional Getters and Setters
     public String getDescription() {
         return description;
     }

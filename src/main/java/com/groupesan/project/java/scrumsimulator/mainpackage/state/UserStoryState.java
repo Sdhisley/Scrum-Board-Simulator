@@ -3,6 +3,7 @@ package com.groupesan.project.java.scrumsimulator.mainpackage.state;
 import com.groupesan.project.java.scrumsimulator.mainpackage.impl.UserStory;
 
 public abstract class UserStoryState {
+    
     protected UserStory userStory;
 
     UserStoryState(UserStory userStory) {
@@ -15,4 +16,8 @@ public abstract class UserStoryState {
     public abstract String onComplete();
 
     public abstract String onDelete();
+
+    
+
+
 }

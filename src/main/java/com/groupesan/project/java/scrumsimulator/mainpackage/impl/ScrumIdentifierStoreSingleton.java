@@ -17,11 +17,9 @@ public class ScrumIdentifierStoreSingleton {
 
     public ScrumIdentifierStoreSingleton() {}
 
-    // The next Id will always increment even if previous Ids are deleted, etc
-
     /**
-     * gets a new Id which is guaranteed to be unique across the entire system, even if previous IDs
-     * were deleted, etc
+     * Gets a new Id which is guaranteed to be unique across the entire system, even if previous IDs
+     * were deleted, etc.
      *
      * @return a unique integer
      */
@@ -36,8 +34,8 @@ public class ScrumIdentifierStoreSingleton {
     }
 
     public void registerIdentifier(ScrumIdentifier identifier) {
-        assert identifier.getValue() < objectList.size();
-        assert objectList.get(identifier.getValue()) == null;
-        objectList.set(identifier.getValue(), identifier);
+        assert identifier.getId() < objectList.size();
+        assert objectList.get(identifier.getId()) == null;
+        objectList.set(identifier.getId(), identifier);
     }
 }

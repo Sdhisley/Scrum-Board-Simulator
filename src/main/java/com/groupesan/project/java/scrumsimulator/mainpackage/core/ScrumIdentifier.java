@@ -11,6 +11,14 @@ public abstract class ScrumIdentifier {
         id = value;
         ScrumIdentifierStoreSingleton.get().registerIdentifier(this);
     }
+    public int getId() {
+        return id;
+    }
+
+    @Override
+    public String toString() {
+        return "Identifier: " + id;
+    }
 
     public int getValue() {
         return id;
@@ -24,5 +32,4 @@ public abstract class ScrumIdentifier {
         return thisObject;
     }
 
-    public abstract String toString();
 }

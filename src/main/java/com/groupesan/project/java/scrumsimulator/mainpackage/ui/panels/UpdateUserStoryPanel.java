@@ -1,15 +1,13 @@
 package com.groupesan.project.java.scrumsimulator.mainpackage.ui.panels;
 
+import com.groupesan.project.java.scrumsimulator.mainpackage.impl.UserStory;
+import com.groupesan.project.java.scrumsimulator.mainpackage.impl.UserStoryStore;
 import com.groupesan.project.java.scrumsimulator.mainpackage.state.UserStoryStateManager;
+
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 
 public class UpdateUserStoryPanel extends JFrame {
 
@@ -36,8 +34,9 @@ public class UpdateUserStoryPanel extends JFrame {
         userStoryLabel.setBounds(10, 20, 120, 25);
         panel.add(userStoryLabel);
 
-        List<String> userStories = UserStoryStateManager.getUserStories();
-        JComboBox<String> userStoryComboBox = new JComboBox<>(userStories.toArray(new String[0]));
+        // Get user stories from the UserStoryStore
+        List<UserStory> userStories = UserStoryStore.getInstance().getUserStories();
+        JComboBox<UserStory> userStoryComboBox = new JComboBox<>(userStories.toArray(new UserStory[0]));
         userStoryComboBox.setBounds(150, 20, 200, 25);
         panel.add(userStoryComboBox);
 
@@ -45,7 +44,7 @@ public class UpdateUserStoryPanel extends JFrame {
         statusLabel.setBounds(10, 50, 120, 25);
         panel.add(statusLabel);
 
-        String[] statusOptions = {"new", "in progress", "ready for test", "completed"};
+        String[] statusOptions = {"New", "In Progress", "Ready for Test", "Completed"};
         JComboBox<String> statusComboBox = new JComboBox<>(statusOptions);
         statusComboBox.setBounds(150, 50, 200, 25);
         panel.add(statusComboBox);
@@ -54,23 +53,61 @@ public class UpdateUserStoryPanel extends JFrame {
         updateButton.setBounds(150, 80, 150, 25);
         panel.add(updateButton);
 
-        updateButton.addActionListener(
-                new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        String selectedUserStory = (String) userStoryComboBox.getSelectedItem();
-                        String selectedStatus = (String) statusComboBox.getSelectedItem();
+        updateButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                UserStory selectedUserStory = (UserStory) userStoryComboBox.getSelectedItem();
+                String selectedStatus = (String) statusComboBox.getSelectedItem();
 
-                        if (selectedUserStory != null && selectedStatus != null) {
-                            UserStoryStateManager.updateUserStoryStatus(
-                                    selectedUserStory, selectedStatus);
-                            JOptionPane.showMessageDialog(null, "Status updated successfully!");
-                            dispose();
-                        } else {
-                            JOptionPane.showMessageDialog(
-                                    null, "Please select a User Story and Status");
-                        }
-                    }
-                });
+                if (selectedUserStory != null && selectedStatus != null) {
+                    UserStoryStateManager.updateUserStoryStatus(
+                            selectedUserStory.getDescription(), selectedStatus);
+                    JOptionPane.showMessageDialog(null, "Status updated successfully!");
+                    dispose();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Please select a User Story and Status");
+                }
+            }
+        });
+    }
+
+    // For testing purposes, you can add a main method to display the panel
+    public static void main(String[] args) {
+        // Adding some dummy user stories for demonstration
+        UserStoryStore.getInstance().addUserStory(new UserStory(
+                "Login Feature",
+                "User can log in",
+                5,
+                8,
+                "Assigned",
+                "New"
+        ));
+        UserStoryStore.getInstance().addUserStory(new UserStory(
+                "Payment Integration",
+                "Integrate payment gateway",
+                8,
+                13,
+                "Unassigned",
+                "In Progress"
+        ));
+        UserStoryStore.getInstance().addUserStory(new UserStory(
+                "User Profile",
+                "User can edit profile",
+                3,
+                5,
+                "Assigned",
+                "Ready for Test"
+        ));
+        UserStoryStore.getInstance().addUserStory(new UserStory(
+                "Search Functionality",
+                "Implement search feature",
+                8,
+                13,
+                "Unassigned",
+                "Completed"
+        ));
+
+        // Display the UpdateUserStoryPanel
+        SwingUtilities.invokeLater(() -> new UpdateUserStoryPanel().setVisible(true));
     }
 }

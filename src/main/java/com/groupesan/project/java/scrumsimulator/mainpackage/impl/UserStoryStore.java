@@ -7,12 +7,6 @@ public class UserStoryStore {
 
     private static UserStoryStore userStoryStore;
 
-    /**
-     * returns the shared instance of the UserStoryStore which contains all user stories in the
-     * system.
-     *
-     * @return
-     */
     public static UserStoryStore getInstance() {
         if (userStoryStore == null) {
             userStoryStore = new UserStoryStore();
@@ -29,7 +23,8 @@ public class UserStoryStore {
     public void addUserStory(UserStory userStory) {
         userStories.add(userStory);
     }
-     public void removeUserStory(UserStory story) {
+
+    public void removeUserStory(UserStory story) {
         userStories.remove(story);
     }
 

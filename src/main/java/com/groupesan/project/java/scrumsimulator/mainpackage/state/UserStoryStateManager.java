@@ -41,7 +41,7 @@ public class UserStoryStateManager {
      * Method to update the status of a selected User Story.
      *
      * @param userStoryDescription The description of the User Story: String
-     * @param newStatus The new status the User Story will be given : String
+     * @param newStatus The new status the User Story will be given: String
      */
     public static void updateUserStoryStatus(String userStoryDescription, String newStatus) {
         try {
