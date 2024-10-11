@@ -1,6 +1,8 @@
 package com.groupesan.project.java.scrumsimulator.mainpackage.ui.widgets;
 
 import com.groupesan.project.java.scrumsimulator.mainpackage.impl.ListofBlocker;
+import com.groupesan.project.java.scrumsimulator.mainpackage.impl.UserStory;
+import com.groupesan.project.java.scrumsimulator.mainpackage.impl.UserStoryStore;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,11 +13,13 @@ public class ListofBlockersWidget extends JPanel implements BaseComponent {
 
     private List<ListofBlocker> blockers;
     private JTable blockerTable;
-    private JButton addUserStoryButton;
+    private DefaultListModel<String> userStoryListModel;
+    private JList<String> userStoryList;
 
     public ListofBlockersWidget() {
         blockers = new ArrayList<>();
         initBlockers();
+        initUserStories();
         this.init();
     }
 
@@ -25,6 +29,14 @@ public class ListofBlockersWidget extends JPanel implements BaseComponent {
         blockers.add(new ListofBlocker(ListofBlocker.BlockerType.PEOPLE_BLOCKER));
         blockers.add(new ListofBlocker(ListofBlocker.BlockerType.NEEDS_MORE_INFO));
         blockers.add(new ListofBlocker(ListofBlocker.BlockerType.REQUIREMENTS_ISSUE));
+    }
+
+    private void initUserStories() {
+        userStoryListModel = new DefaultListModel<>();
+        for (UserStory userStory : UserStoryStore.getInstance().getUserStories()) {
+            userStoryListModel.addElement(userStory.toString());
+        }
+        userStoryList = new JList<>(userStoryListModel);
     }
 
     public void init() {
@@ -45,12 +57,10 @@ public class ListofBlockersWidget extends JPanel implements BaseComponent {
         JScrollPane scrollPane = new JScrollPane(blockerTable);
         add(scrollPane, BorderLayout.CENTER);
 
-        addUserStoryButton = new JButton("Assign User Story");
-        addUserStoryButton.addActionListener(e -> assignUserStory());
-        add(addUserStoryButton, BorderLayout.SOUTH);
-    }
 
-    private void assignUserStory() {
-        System.out.println("clicked assign user Story button");
+        JPanel userStoryPanel = new JPanel(new BorderLayout());
+        userStoryPanel.add(new JLabel("All User Stories:"), BorderLayout.NORTH);
+        userStoryPanel.add(new JScrollPane(userStoryList), BorderLayout.CENTER);
+        add(userStoryPanel, BorderLayout.EAST);
     }
 }
