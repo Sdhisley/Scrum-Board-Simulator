@@ -212,7 +212,7 @@ blockersButton.addActionListener(
         public void actionPerformed(ActionEvent e) {
             JFrame blockersFrame = new JFrame("List of Blockers");
             blockersFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            blockersFrame.setSize(600, 400);
+            blockersFrame.setSize(800, 400);
             blockersFrame.add(new ListofBlockersWidget());
             blockersFrame.setVisible(true);
         }
