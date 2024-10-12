@@ -57,7 +57,7 @@ public class ListofBlockersWidget extends JPanel implements BaseComponent {
         JScrollPane scrollPane = new JScrollPane(blockerTable);
         add(scrollPane, BorderLayout.CENTER);
 
-
+        
         JPanel userStoryPanel = new JPanel(new BorderLayout());
         userStoryPanel.add(new JLabel("All User Stories:"), BorderLayout.NORTH);
         userStoryPanel.add(new JScrollPane(userStoryList), BorderLayout.CENTER);
