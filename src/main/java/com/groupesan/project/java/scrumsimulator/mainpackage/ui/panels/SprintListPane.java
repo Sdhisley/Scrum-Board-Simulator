@@ -34,7 +34,7 @@ public class SprintListPane extends JFrame implements BaseComponent {
     public void init() {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setTitle("Sprints list");
-        setSize(600, 400);  // Adjusted size to accommodate more details
+        setSize(600, 400);  
 
         GridBagLayout myGridbagLayout = new GridBagLayout();
         JPanel myJpanel = new JPanel();
@@ -44,13 +44,12 @@ public class SprintListPane extends JFrame implements BaseComponent {
         subPanel = new JPanel();
         subPanel.setLayout(new GridBagLayout());
 
-        // Populate sprint widgets
+        
         int i = 0;
         for (Sprint sprint : SprintStore.getInstance().getSprints()) {
             SprintWidget widget = new SprintWidget(sprint);
             widgets.add(widget);
 
-            // Add listener to display sprint details including user stories
             widget.addViewDetailsButtonListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -69,13 +68,11 @@ public class SprintListPane extends JFrame implements BaseComponent {
                             GridBagConstraints.HORIZONTAL));
         }
 
-        // Add scroll pane for the sprint list
         myJpanel.add(
                 new JScrollPane(subPanel),
                 new CustomConstraints(
                         0, 0, GridBagConstraints.WEST, 1.0, 0.8, GridBagConstraints.BOTH));
 
-        // New Sprint Button
         JButton newSprintButton = new JButton("New Sprint");
         newSprintButton.addActionListener((ActionEvent e) -> {
             NewSprintForm form = new NewSprintForm();
@@ -101,14 +98,13 @@ public class SprintListPane extends JFrame implements BaseComponent {
                                             0.1,
                                             GridBagConstraints.HORIZONTAL));
 
-                            // Repaint and revalidate the panel to reflect the new sprint
                             subPanel.revalidate();
                             subPanel.repaint();
                         }
                     });
         });
 
-        // Edit Sprint Button
+
         JButton editSprintButton = new JButton("Edit Sprint");
         editSprintButton.addActionListener((ActionEvent e) -> {
             List<Sprint> sprints = SprintStore.getInstance().getSprints();
@@ -117,11 +113,10 @@ public class SprintListPane extends JFrame implements BaseComponent {
                 return;
             }
 
-            // Create a JList to select the sprint to edit
+  
             JList<Sprint> sprintList = new JList<>(sprints.toArray(new Sprint[0]));
             sprintList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
-            // Show the sprint selection dialog
             int result = JOptionPane.showConfirmDialog(this, new JScrollPane(sprintList), 
                     "Select a Sprint to Edit", JOptionPane.OK_CANCEL_OPTION);
 
@@ -134,7 +129,6 @@ public class SprintListPane extends JFrame implements BaseComponent {
             }
         });
 
-        // Add buttons to the panel
         myJpanel.add(newSprintButton,
                 new CustomConstraints(0, 1, GridBagConstraints.WEST, 1.0, 0.2, GridBagConstraints.HORIZONTAL));
         myJpanel.add(editSprintButton,
@@ -143,9 +137,6 @@ public class SprintListPane extends JFrame implements BaseComponent {
         add(myJpanel);
     }
 
-    /**
-     * Displays the detailed information of a sprint, including its user stories.
-     */
     private void displaySprintDetails(Sprint sprint) {
         StringBuilder details = new StringBuilder();
         details.append("Sprint ID: ").append(sprint.getId()).append("\n")
@@ -154,14 +145,16 @@ public class SprintListPane extends JFrame implements BaseComponent {
                .append("Length: ").append(sprint.getLength()).append(" days\n")
                .append("Remaining: ").append(sprint.getDaysRemaining()).append(" days\n")
                .append("Number of User Stories: ").append(sprint.getUserStories().size()).append("\n");
-
-
+    
         details.append("\nUser Stories:\n");
         for (UserStory userStory : sprint.getUserStories()) {
             details.append("- ").append(userStory.getName())
-                   .append(" (").append(userStory.getPointValue()).append(" points)\n");
+                   .append(" (").append(userStory.getPointValue()).append(" points)\n")
+                   .append(" - Assigned: ").append(userStory.getAssignStatus())
+                   .append("\n");
         }
-
+    
         JOptionPane.showMessageDialog(this, details.toString(), "Sprint Details", JOptionPane.INFORMATION_MESSAGE);
     }
+    
 }
