@@ -19,6 +19,6 @@ public class WizardManager {
                         simulation -> {
                             System.out.println(simulation);
                         })
-                .setVisible(true);
+                .setVisible(false);
     }
 }
