@@ -150,7 +150,7 @@ public class SprintListPane extends JFrame implements BaseComponent {
         for (UserStory userStory : sprint.getUserStories()) {
             details.append("- ").append(userStory.getName())
                    .append(" (").append(userStory.getPointValue()).append(" points)\n")
-                   .append(" - Assigned: ").append(userStory.getAssignStatus())
+                   .append(" - Assignment status: ").append(userStory.getAssignStatus())
                    .append("\n");
         }
     
