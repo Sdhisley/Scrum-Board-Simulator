@@ -33,7 +33,7 @@ public class SprintListPane extends JFrame implements BaseComponent {
     @Override
     public void init() {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setTitle("Sprints list");
+        setTitle("Sprints List");
         setSize(600, 400);  
 
         GridBagLayout myGridbagLayout = new GridBagLayout();
@@ -44,7 +44,6 @@ public class SprintListPane extends JFrame implements BaseComponent {
         subPanel = new JPanel();
         subPanel.setLayout(new GridBagLayout());
 
-        
         int i = 0;
         for (Sprint sprint : SprintStore.getInstance().getSprints()) {
             SprintWidget widget = new SprintWidget(sprint);
@@ -81,8 +80,7 @@ public class SprintListPane extends JFrame implements BaseComponent {
             form.addWindowListener(
                     new java.awt.event.WindowAdapter() {
                         @Override
-                        public void windowClosed(
-                                java.awt.event.WindowEvent windowEvent) {
+                        public void windowClosed(java.awt.event.WindowEvent windowEvent) {
                             Sprint newSprint = form.getSprintObject();
                             SprintWidget newWidget = new SprintWidget(newSprint);
 
@@ -104,7 +102,6 @@ public class SprintListPane extends JFrame implements BaseComponent {
                     });
         });
 
-
         JButton editSprintButton = new JButton("Edit Sprint");
         editSprintButton.addActionListener((ActionEvent e) -> {
             List<Sprint> sprints = SprintStore.getInstance().getSprints();
@@ -113,7 +110,6 @@ public class SprintListPane extends JFrame implements BaseComponent {
                 return;
             }
 
-  
             JList<Sprint> sprintList = new JList<>(sprints.toArray(new Sprint[0]));
             sprintList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
@@ -145,16 +141,15 @@ public class SprintListPane extends JFrame implements BaseComponent {
                .append("Length: ").append(sprint.getLength()).append(" days\n")
                .append("Remaining: ").append(sprint.getDaysRemaining()).append(" days\n")
                .append("Number of User Stories: ").append(sprint.getUserStories().size()).append("\n");
-    
+
         details.append("\nUser Stories:\n");
         for (UserStory userStory : sprint.getUserStories()) {
             details.append("- ").append(userStory.getName())
                    .append(" (").append(userStory.getPointValue()).append(" points)\n")
-                   .append(" - Assignment status: ").append(userStory.getAssignStatus())
-                   .append("\n");
+                   .append(" - Assignment status: ").append(userStory.getAssignStatus()).append("\n")
+                   .append(" - User story status: ").append(userStory.getStatus()).append("\n");
         }
-    
+
         JOptionPane.showMessageDialog(this, details.toString(), "Sprint Details", JOptionPane.INFORMATION_MESSAGE);
     }
-    
 }
