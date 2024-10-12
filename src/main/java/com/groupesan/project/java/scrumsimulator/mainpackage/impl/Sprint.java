@@ -11,6 +11,7 @@ public class Sprint {
     private int number;
     private int remainingDays;
     private int id;
+    private String isAssgined;
 
     public Sprint(String name, String description, int length, int number, int id) {
         this.name = name;
@@ -86,6 +87,9 @@ public class Sprint {
 
     public int getId() {
         return id;
+    }
+    public String getAssignStatus(){
+        return isAssgined;
     }
 
     @Override
