@@ -18,6 +18,9 @@ out/
 .project
 .settings/
 
+# Ignore compiled .class files
+.class
+
 # Ignore generated files by Android Studio
 *.apk
 *.ap_

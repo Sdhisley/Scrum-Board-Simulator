@@ -1,5 +1,15 @@
 package com.groupesan.project.java.scrumsimulator.mainpackage.ui.panels;
 
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+
 import com.groupesan.project.java.scrumsimulator.mainpackage.core.Player;
 import com.groupesan.project.java.scrumsimulator.mainpackage.core.ScrumRole;
 import com.groupesan.project.java.scrumsimulator.mainpackage.state.SimulationManager;
@@ -7,14 +17,6 @@ import com.groupesan.project.java.scrumsimulator.mainpackage.state.SimulationSta
 import com.groupesan.project.java.scrumsimulator.mainpackage.ui.widgets.BaseComponent;
 import com.groupesan.project.java.scrumsimulator.mainpackage.ui.widgets.ListofBlockersWidget;
 import com.groupesan.project.java.scrumsimulator.mainpackage.utils.CustomConstraints;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
 
 public class DemoPane extends JFrame implements BaseComponent {
 
@@ -205,29 +207,46 @@ public class DemoPane extends JFrame implements BaseComponent {
                         8, 0, GridBagConstraints.WEST, 1.0, 1.0, GridBagConstraints.HORIZONTAL));
 
         add(myJpanel);
-JButton blockersButton = new JButton("List of Blockers");
-blockersButton.addActionListener(
-    new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            JFrame blockersFrame = new JFrame("List of Blockers");
-            blockersFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            blockersFrame.setSize(800, 400);
-            blockersFrame.add(new ListofBlockersWidget());
-            blockersFrame.setVisible(true);
+        JButton blockersButton = new JButton("List of Blockers");
+        blockersButton.addActionListener(
+                new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFrame blockersFrame = new JFrame("List of Blockers");
+                blockersFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                blockersFrame.setSize(800, 400);
+                blockersFrame.add(new ListofBlockersWidget());
+                blockersFrame.setVisible(true);
+            }
         }
-    }
-);
-myJpanel.add(
-    blockersButton,
-    new CustomConstraints(
-        9, 0, GridBagConstraints.WEST, 1.0, 1.0, GridBagConstraints.HORIZONTAL));
+        );
+        myJpanel.add(
+            blockersButton,
+            new CustomConstraints(
+                    9, 0, GridBagConstraints.WEST, 1.0, 1.0, GridBagConstraints.HORIZONTAL));
+
+        JButton solutionsButton = new JButton("Solutions");
+        solutionsButton.addActionListener(
+                new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFrame blockersFrame = new JFrame("List of Solutions for Blockers");
+                blockersFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                blockersFrame.setSize(800, 400);
+                blockersFrame.add(new ListofBlockersWidget());
+                blockersFrame.setVisible(true);
+            }
+        });
+        myJpanel.add(
+                solutionsButton,
+                new CustomConstraints(
+                        0, 1, GridBagConstraints.WEST, 1.0, 1.0, GridBagConstraints.HORIZONTAL));
 
 // Add the button to your JPanel
-myJpanel.add(
-    blockersButton,
-    new CustomConstraints(
-        9, 0, GridBagConstraints.WEST, 1.0, 1.0, GridBagConstraints.HORIZONTAL));
+        myJpanel.add(
+                blockersButton,
+                new CustomConstraints(
+                        9, 0, GridBagConstraints.WEST, 1.0, 1.0, GridBagConstraints.HORIZONTAL));
         myJpanel.add(
                 blockersButton,
                 new CustomConstraints(
