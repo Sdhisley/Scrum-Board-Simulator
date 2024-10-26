@@ -1,14 +1,14 @@
 package com.groupesan.project.java.scrumsimulator.mainpackage.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.groupesan.project.java.scrumsimulator.mainpackage.core.Player;
 import com.groupesan.project.java.scrumsimulator.mainpackage.core.ScrumIdentifier;
 import com.groupesan.project.java.scrumsimulator.mainpackage.core.ScrumObject;
 import com.groupesan.project.java.scrumsimulator.mainpackage.state.UserStoryDeletedState;
 import com.groupesan.project.java.scrumsimulator.mainpackage.state.UserStoryState;
 import com.groupesan.project.java.scrumsimulator.mainpackage.state.UserStoryUnselectedState;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class UserStory extends ScrumObject {
     private UserStoryIdentifier id;
@@ -19,22 +19,24 @@ public class UserStory extends ScrumObject {
     private String assignStatus;
     private String isAssigned;
     private String status;
+    private String solution;
     private UserStoryState state;
     private Player owner;
 
     // Constructor with only essential parameters
     public UserStory(String name, double pointValue, double businessValue, String assignStatus) {
-        this(name, "", pointValue, businessValue, assignStatus, "New"); // Default to "New" status
+        this(name, "", pointValue, businessValue, assignStatus, "New", "NA"); // Default to "New" status
     }
 
     // Full constructor with all fields
-    public UserStory(String name, String description, double pointValue, double businessValue, String assignStatus, String status) {
+    public UserStory(String name, String description, double pointValue, double businessValue, String assignStatus, String status, String solution) {
         this.name = name;
         this.description = description;
         this.pointValue = pointValue;
         this.businessValue = businessValue;
         this.assignStatus = assignStatus;
         this.status = status;
+        this.solution = solution;
         this.state = new UserStoryUnselectedState(this); // Default state
         register();
     }
@@ -109,6 +111,14 @@ public class UserStory extends ScrumObject {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getSolution(){
+        return solution;
+    }
+
+    public void setSolution(String solution){
+        this.solution = solution;
     }
 
     public void changeState(UserStoryState state) {

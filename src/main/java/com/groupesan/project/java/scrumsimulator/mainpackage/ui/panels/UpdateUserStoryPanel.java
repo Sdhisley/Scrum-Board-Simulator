@@ -91,7 +91,8 @@ public class UpdateUserStoryPanel extends JFrame {
                 5,
                 8,
                 "Assigned",
-                "New"
+                "New",
+                "NA"
         ));
         UserStoryStore.getInstance().addUserStory(new UserStory(
                 "Payment Integration",
@@ -99,7 +100,8 @@ public class UpdateUserStoryPanel extends JFrame {
                 8,
                 13,
                 "Unassigned",
-                "In Progress"
+                "In Progress",
+                "Add more developers"
         ));
         UserStoryStore.getInstance().addUserStory(new UserStory(
                 "User Profile",
@@ -107,7 +109,8 @@ public class UpdateUserStoryPanel extends JFrame {
                 3,
                 5,
                 "Assigned",
-                "Ready for Test"
+                "Ready for Test",
+                "Conduct more research"
         ));
         UserStoryStore.getInstance().addUserStory(new UserStory(
                 "Search Functionality",
@@ -115,7 +118,8 @@ public class UpdateUserStoryPanel extends JFrame {
                 8,
                 13,
                 "Unassigned",
-                "Completed"
+                "Completed",
+                "Reevaluate Requirements"
         ));
 
         // Display the UpdateUserStoryPanel

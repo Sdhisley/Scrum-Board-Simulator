@@ -21,6 +21,7 @@ public class UserStoryWidget extends JPanel implements BaseComponent {
     private JLabel businessValue;
     private JLabel isAssigned;
     private JLabel status;
+    private JLabel solution;
 
     private transient UserStory userStory;
 
@@ -39,6 +40,7 @@ public class UserStoryWidget extends JPanel implements BaseComponent {
         businessValue = createLabel(Double.toString(userStory.getBusinessValue()));
         isAssigned = createLabel(userStory.getAssignStatus());
         status = createLabel(userStory.getStatus());
+        solution = createLabel(userStory.getSolution());
 
         GridBagLayout layout = new GridBagLayout();
         setLayout(layout);
@@ -50,6 +52,7 @@ public class UserStoryWidget extends JPanel implements BaseComponent {
         add(businessValue, new CustomConstraints(4, 0, GridBagConstraints.WEST, 0.1, 0.0, GridBagConstraints.HORIZONTAL));
         add(isAssigned, new CustomConstraints(5, 0, GridBagConstraints.WEST, 0.1, 0.0, GridBagConstraints.HORIZONTAL));
         add(status, new CustomConstraints(6, 0, GridBagConstraints.WEST, 0.1, 0.0, GridBagConstraints.HORIZONTAL));
+        add(solution, new CustomConstraints(7, 0, GridBagConstraints.WEST, 0.1, 0.0, GridBagConstraints.HORIZONTAL));
     }
 
     private JLabel createLabel(String text) {
