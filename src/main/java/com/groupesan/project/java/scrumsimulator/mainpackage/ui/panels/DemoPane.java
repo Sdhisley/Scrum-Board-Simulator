@@ -16,6 +16,7 @@ import com.groupesan.project.java.scrumsimulator.mainpackage.state.SimulationMan
 import com.groupesan.project.java.scrumsimulator.mainpackage.state.SimulationStateManager;
 import com.groupesan.project.java.scrumsimulator.mainpackage.ui.widgets.BaseComponent;
 import com.groupesan.project.java.scrumsimulator.mainpackage.ui.widgets.ListofBlockersWidget;
+import com.groupesan.project.java.scrumsimulator.mainpackage.ui.widgets.ListofSolutionsWidget;
 import com.groupesan.project.java.scrumsimulator.mainpackage.utils.CustomConstraints;
 
 public class DemoPane extends JFrame implements BaseComponent {
@@ -233,7 +234,7 @@ public class DemoPane extends JFrame implements BaseComponent {
                 JFrame blockersFrame = new JFrame("List of Solutions for Blockers");
                 blockersFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 blockersFrame.setSize(800, 400);
-                blockersFrame.add(new ListofBlockersWidget());
+                blockersFrame.add(new ListofSolutionsWidget());
                 blockersFrame.setVisible(true);
             }
         });
