@@ -13,6 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -22,16 +23,17 @@ import javax.swing.border.EmptyBorder;
 public class NewUserStoryForm extends JFrame implements BaseComponent {
 
     Double[] pointsList = {1.0, 2.0, 3.0, 5.0, 8.0, 11.0, 19.0, 30.0, 49.0};
-    Double [] bvList = {0.0, 1.0, 3.0, 7.0, 11.0, 17.0, 23.0};
-
-    public NewUserStoryForm() {
-        this.init();
-    }
+    Double[] bvList = {0.0, 1.0, 3.0, 7.0, 11.0, 17.0, 23.0};
 
     private JTextField nameField = new JTextField();
     private JTextArea descArea = new JTextArea();
     private JComboBox<Double> pointsCombo = new JComboBox<>(pointsList);
     private JComboBox<Double> bvCombo = new JComboBox<>(bvList);
+    private boolean isSubmitted = false;
+
+    public NewUserStoryForm() {
+        this.init();
+    }
 
     public void init() {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -48,7 +50,6 @@ public class NewUserStoryForm extends JFrame implements BaseComponent {
         myJpanel.setLayout(myGridbagLayout);
 
         BorderLayout myBorderLayout = new BorderLayout();
-
         setLayout(myBorderLayout);
 
         JLabel nameLabel = new JLabel("Name:");
@@ -85,32 +86,53 @@ public class NewUserStoryForm extends JFrame implements BaseComponent {
         myJpanel.add(
                 bvLabel,
                 new CustomConstraints(
-                       0,3, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL));
-                       myJpanel.add(
-        bvCombo,
-        new CustomConstraints(
-               1, 3, GridBagConstraints.EAST, 1.0, 0.0, GridBagConstraints.HORIZONTAL));
-                       
+                        0, 3, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL));
+        myJpanel.add(
+                bvCombo,
+                new CustomConstraints(
+                        1, 3, GridBagConstraints.EAST, 1.0, 0.0, GridBagConstraints.HORIZONTAL));
 
         JButton cancelButton = new JButton("Cancel");
-
-        cancelButton.addActionListener(
-                new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        dispose();
-                    }
-                });
+        cancelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                isSubmitted = false;
+                dispose();
+            }
+        });
 
         JButton submitButton = new JButton("Submit");
+        submitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String name = nameField.getText().trim();
+                String description = descArea.getText().trim();
 
-        submitButton.addActionListener(
-                new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        dispose();
-                    }
-                });
+                if (name.isEmpty()) {
+                    JOptionPane.showMessageDialog(
+                            NewUserStoryForm.this,
+                            "Name cannot be empty.",
+                            "Validation Error",
+                            JOptionPane.ERROR_MESSAGE
+                    );
+                    return;
+                }
+
+                if (description.isEmpty()) {
+                    JOptionPane.showMessageDialog(
+                            NewUserStoryForm.this,
+                            "Description cannot be empty.",
+                            "Validation Error",
+                            JOptionPane.ERROR_MESSAGE
+                    );
+                    return;
+                }
+
+                isSubmitted = true;
+                getUserStoryObject();
+                dispose();
+            }
+        });
 
         myJpanel.add(
                 cancelButton,
@@ -120,19 +142,18 @@ public class NewUserStoryForm extends JFrame implements BaseComponent {
                 new CustomConstraints(1, 4, GridBagConstraints.WEST, GridBagConstraints.NONE));
 
         add(myJpanel);
+    }
 
-
-    }    
     public UserStory getUserStoryObject() {
+        if (!isSubmitted) return null;
+
         String name = nameField.getText();
         String description = descArea.getText();
         Double points = (Double) pointsCombo.getSelectedItem();
         Double businessValue = (Double) bvCombo.getSelectedItem();
         String status = "Unassigned";
-        
 
         UserStoryFactory userStoryFactory = UserStoryFactory.getInstance();
-
         UserStory userStory = userStoryFactory.createNewUserStory(name, description, points, businessValue, status);
         userStory.setAssignStatus(status);
         userStory.doRegister();
