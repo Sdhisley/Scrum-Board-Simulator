@@ -4,10 +4,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-
 import com.groupesan.project.java.scrumsimulator.mainpackage.impl.UserStory;
 import com.groupesan.project.java.scrumsimulator.mainpackage.ui.panels.EditUserStoryForm;
 import com.groupesan.project.java.scrumsimulator.mainpackage.utils.CustomConstraints;
@@ -24,6 +22,7 @@ public class UserStoryWidget extends JPanel implements BaseComponent {
     private JLabel solution;
 
     private transient UserStory userStory;
+    private boolean isDialogOpen = false;
 
     public UserStoryWidget(UserStory userStory) {
         this.userStory = userStory;
@@ -53,13 +52,16 @@ public class UserStoryWidget extends JPanel implements BaseComponent {
         add(isAssigned, new CustomConstraints(5, 0, GridBagConstraints.WEST, 0.1, 0.0, GridBagConstraints.HORIZONTAL));
         add(status, new CustomConstraints(6, 0, GridBagConstraints.WEST, 0.1, 0.0, GridBagConstraints.HORIZONTAL));
         add(solution, new CustomConstraints(7, 0, GridBagConstraints.WEST, 0.1, 0.0, GridBagConstraints.HORIZONTAL));
+
+        revalidate();
+        repaint();
     }
 
     private JLabel createLabel(String text) {
         JLabel label = new JLabel(text);
         label.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
                 openEditDialog();
             }
         });
@@ -67,16 +69,22 @@ public class UserStoryWidget extends JPanel implements BaseComponent {
     }
 
     private void openEditDialog() {
+        if (isDialogOpen) {
+            return;
+        }
+        isDialogOpen = true;
         EditUserStoryForm form = new EditUserStoryForm(userStory);
         form.setVisible(true);
 
         form.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosed(java.awt.event.WindowEvent windowEvent) {
+                isDialogOpen = false;
                 UserStoryWidget.this.updateUserStoryDetails();
             }
         });
     }
+
     private void updateUserStoryDetails() {
         id.setText(userStory.getId().toString());
         points.setText(Double.toString(userStory.getPointValue()));
@@ -85,5 +93,9 @@ public class UserStoryWidget extends JPanel implements BaseComponent {
         businessValue.setText(Double.toString(userStory.getBusinessValue()));
         isAssigned.setText(userStory.getAssignStatus());
         status.setText(userStory.getStatus());
+        solution.setText(userStory.getSolution());
+
+        revalidate();
+        repaint();
     }
 }
