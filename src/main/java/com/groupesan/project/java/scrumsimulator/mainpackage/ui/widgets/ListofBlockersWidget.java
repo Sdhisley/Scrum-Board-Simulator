@@ -80,11 +80,21 @@ public class ListofBlockersWidget extends JPanel implements BaseComponent {
         int selectedUserStoryIndex = userStoryList.getSelectedIndex();
 
         if (selectedBlockerRow >= 0 && selectedUserStoryIndex >= 0) {
-            String selectedUserStory = userStoryListModel.get(selectedUserStoryIndex);
             ListofBlocker selectedBlocker = blockerStore.getBlockers().get(selectedBlockerRow);
-            selectedBlocker.addUserStory(selectedUserStory);
 
+            if (selectedBlocker.getBlockerType() == ListofBlocker.BlockerType.NEEDS_MORE_INFO 
+                    && !selectedBlocker.getUserStories().isEmpty()) {
+                JOptionPane.showMessageDialog(
+                    this, 
+                    "Please resolve the current spike before assigning another user story."
+                );
+                return;
+            }
+
+            String selectedUserStory = userStoryListModel.get(selectedUserStoryIndex);
+            selectedBlocker.addUserStory(selectedUserStory);
             blockerTable.setValueAt(String.join(", ", selectedBlocker.getUserStories()), selectedBlockerRow, 1);
+            updateStartSpikeButton();
         } else {
             JOptionPane.showMessageDialog(this, "Please select a blocker and a user story.");
         }
@@ -96,8 +106,8 @@ public class ListofBlockersWidget extends JPanel implements BaseComponent {
         if (selectedBlockerRow >= 0) {
             ListofBlocker selectedBlocker = blockerStore.getBlockers().get(selectedBlockerRow);
             selectedBlocker.getUserStories().clear();
-
             blockerTable.setValueAt("", selectedBlockerRow, 1);
+            updateStartSpikeButton();
         } else {
             JOptionPane.showMessageDialog(this, "Please select a blocker to clear the assignment.");
         }
@@ -107,7 +117,9 @@ public class ListofBlockersWidget extends JPanel implements BaseComponent {
         int selectedRow = blockerTable.getSelectedRow();
         if (selectedRow >= 0) {
             ListofBlocker selectedBlocker = blockerStore.getBlockers().get(selectedRow);
-            startSpikeButton.setEnabled(selectedBlocker.getBlockerType() == ListofBlocker.BlockerType.NEEDS_MORE_INFO);
+            boolean isNeedsMoreInfo = selectedBlocker.getBlockerType() == ListofBlocker.BlockerType.NEEDS_MORE_INFO;
+            boolean hasUserStories = !selectedBlocker.getUserStories().isEmpty();
+            startSpikeButton.setEnabled(isNeedsMoreInfo && hasUserStories);
         } else {
             startSpikeButton.setEnabled(false);
         }
