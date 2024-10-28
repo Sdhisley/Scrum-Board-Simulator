@@ -4,7 +4,11 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -16,14 +20,21 @@ import javax.swing.JScrollPane;
 
 import com.groupesan.project.java.scrumsimulator.mainpackage.impl.BlockerStore;
 import com.groupesan.project.java.scrumsimulator.mainpackage.impl.ListofBlocker;
+import com.groupesan.project.java.scrumsimulator.mainpackage.impl.ListofSolution;
 import com.groupesan.project.java.scrumsimulator.mainpackage.impl.ListofSolution.SolutionType;
+import com.groupesan.project.java.scrumsimulator.mainpackage.impl.SolutionStore;
 
 public class ListofSolutionsWidget extends JPanel {
 
     private BlockerStore blockerStore;
+    private SolutionStore solutionStore;
+    private Map<ListofBlocker, JComboBox<SolutionType>> solutionSelectors;
 
     public ListofSolutionsWidget() {
         blockerStore = BlockerStore.getInstance();
+        solutionStore = SolutionStore.getInstance();
+        solutionSelectors = new HashMap<>();
+
         initUI();
     }
 
@@ -65,6 +76,16 @@ public class ListofSolutionsWidget extends JPanel {
                 JComboBox<SolutionType> solutionDropdown = new JComboBox<>(SolutionType.values());
                 solutionDropdown.setPreferredSize(new Dimension(180, 20));
                 solutionDropdown.setMaximumSize(new Dimension(180, 20));
+                solutionSelectors.put(blocker, solutionDropdown);
+                
+                solutionDropdown.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        SolutionType selectedSolution = (SolutionType) solutionDropdown.getSelectedItem();
+                        solutionStore.addSolutionForBlocker(blocker, selectedSolution); // Store with specific blocker
+                    }
+                });
+
                 solutionTypePanel.add(Box.createVerticalStrut(15));
                 solutionTypePanel.add(solutionDropdown);
             }
