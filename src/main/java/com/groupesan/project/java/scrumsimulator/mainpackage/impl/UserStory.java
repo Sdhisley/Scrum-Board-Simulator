@@ -22,16 +22,15 @@ public class UserStory extends ScrumObject {
     private String solution;
     private UserStoryState state;
     private Player owner;
-    private List<String> blockers;  // List to store blockers
+    private List<String> blockers; // List of blocker descriptions
+    private List<Boolean> blockerResolved; // List to indicate if each blocker is resolved
 
-    // Constructor with only essential parameters
     public UserStory(String name, double pointValue, double businessValue, String assignStatus) {
-        this(name, "", pointValue, businessValue, assignStatus, "New", "NA", new ArrayList<>()); // Default to "New" status and empty blockers list
+        this(name, "", pointValue, businessValue, assignStatus, "New", "NA", new ArrayList<>(), new ArrayList<>());
     }
 
-    // Full constructor with all fields
     public UserStory(String name, String description, double pointValue, double businessValue, 
-                     String assignStatus, String status, String solution, List<String> blockers) {
+                     String assignStatus, String status, String solution, List<String> blockers, List<Boolean> blockerResolved) {
         this.name = name;
         this.description = description;
         this.pointValue = pointValue;
@@ -39,8 +38,9 @@ public class UserStory extends ScrumObject {
         this.assignStatus = assignStatus;
         this.status = status;
         this.solution = solution;
-        this.state = new UserStoryUnselectedState(this); // Default state
-        this.blockers = blockers;  // Initialize blockers
+        this.state = new UserStoryUnselectedState(this);
+        this.blockers = blockers; // Initialize blockers list
+        this.blockerResolved = blockerResolved; // Initialize blocker resolved list
         register();
     }
 
@@ -148,7 +148,6 @@ public class UserStory extends ScrumObject {
         return new ArrayList<>();
     }
 
-    // Blockers management methods
     public List<String> getBlockers() {
         return blockers;
     }
@@ -160,11 +159,28 @@ public class UserStory extends ScrumObject {
     public void addBlocker(String blocker) {
         if (!blockers.contains(blocker)) {
             blockers.add(blocker);
+            blockerResolved.add(false); // Mark as unresolved when added
         }
     }
 
     public void removeBlocker(String blocker) {
-        blockers.remove(blocker);
+        int index = blockers.indexOf(blocker);
+        if (index >= 0) {
+            blockers.remove(index);
+            blockerResolved.remove(index); // Remove the corresponding resolved status
+        }
+    }
+
+    public void resolveBlocker(String blocker) {
+        int index = blockers.indexOf(blocker);
+        if (index >= 0) {
+            blockerResolved.set(index, true); // Mark the blocker as resolved
+        }
+    }
+
+    public boolean isBlockerResolved() {
+        // Check if all blockers are resolved
+        return blockerResolved.stream().allMatch(Boolean::booleanValue);
     }
 
     @Override

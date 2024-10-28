@@ -2,7 +2,7 @@ package com.groupesan.project.java.scrumsimulator.mainpackage.ui.widgets;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Insets; // Import Insets for padding
+import java.awt.Insets;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
@@ -23,20 +23,19 @@ public class UserStoryWidget extends JPanel implements BaseComponent {
     private JLabel isAssigned;
     private JLabel status;
     private JLabel solution;
-    private JLabel blockerLabel;  // New label for blocker
-
+    private JLabel blockerLabel;
+    private JLabel blockerStatusLabel;
     private transient UserStory userStory;
     private boolean isDialogOpen = false;
 
     public UserStoryWidget(UserStory userStory) {
         this.userStory = userStory;
-        this.init();
+        init();
     }
 
     public void init() {
         removeAll();
 
-        // Initialize labels for user story properties
         id = createLabel(userStory.getId().toString());
         points = createLabel(Double.toString(userStory.getPointValue()));
         name = createLabel(userStory.getName());
@@ -45,29 +44,24 @@ public class UserStoryWidget extends JPanel implements BaseComponent {
         isAssigned = createLabel(userStory.getAssignStatus());
         status = createLabel(userStory.getStatus());
         solution = createLabel(userStory.getSolution());
-
-        // Initialize blocker label
         blockerLabel = createLabel(getFirstBlocker());
+        blockerStatusLabel = createLabel(userStory.isBlockerResolved() ? "Blocker: Resolved" : "Blocker: Unresolved");
 
-        // Layout setup
-        GridBagLayout layout = new GridBagLayout();
-        setLayout(layout);
-
+        setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10); // Add padding
-
-        gbc.gridx = 0; gbc.gridy = 0; gbc.weightx = 0.1;
+        gbc.insets = new Insets(10, 10, 10, 10);
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        add(id, gbc);
 
-        gbc.gridx = 1; add(points, gbc);
-        gbc.gridx = 2; add(name, gbc);
-        gbc.gridx = 3; gbc.weightx = 0.7; add(desc, gbc);
+        gbc.gridx = 0; gbc.gridy = 0; gbc.weightx = 0.2; add(id, gbc);
+        gbc.gridx = 1; gbc.weightx = 0.1; add(points, gbc);
+        gbc.gridx = 2; gbc.weightx = 0.2; add(name, gbc);
+        gbc.gridx = 3; gbc.weightx = 0.3; add(desc, gbc);
         gbc.gridx = 4; gbc.weightx = 0.1; add(businessValue, gbc);
-        gbc.gridx = 5; add(isAssigned, gbc);
-        gbc.gridx = 6; add(status, gbc);
-        gbc.gridx = 7; add(solution, gbc);
-        gbc.gridx = 8; add(blockerLabel, gbc);
+        gbc.gridx = 5; gbc.weightx = 0.2; add(isAssigned, gbc);
+        gbc.gridx = 6; gbc.weightx = 0.1; add(status, gbc);
+        gbc.gridx = 7; gbc.weightx = 0.2; add(solution, gbc);
+        gbc.gridx = 8; gbc.weightx = 0.2; add(blockerLabel, gbc);
+        gbc.gridx = 9; gbc.weightx = 0.3; add(blockerStatusLabel, gbc);
 
         revalidate();
         repaint();
@@ -94,13 +88,13 @@ public class UserStoryWidget extends JPanel implements BaseComponent {
             @Override
             public void windowClosed(java.awt.event.WindowEvent windowEvent) {
                 isDialogOpen = false;
-                UserStoryWidget.this.updateUserStoryDetails();
+                updateUserStoryDetails();
             }
         });
     }
 
     private void updateUserStoryDetails() {
-        this.init();
+        init();
     }
 
     private String getFirstBlocker() {

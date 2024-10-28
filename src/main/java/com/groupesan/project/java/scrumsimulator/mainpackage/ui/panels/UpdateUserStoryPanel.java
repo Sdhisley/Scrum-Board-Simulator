@@ -85,6 +85,7 @@ public class UpdateUserStoryPanel extends JFrame {
                 "Assigned",
                 "New",
                 "NA",
+                new ArrayList<>(),
                 new ArrayList<>()
         ));
         UserStoryStore.getInstance().addUserStory(new UserStory(
@@ -95,6 +96,7 @@ public class UpdateUserStoryPanel extends JFrame {
                 "Unassigned",
                 "In Progress",
                 "Add more developers",
+                new ArrayList<>(),
                 new ArrayList<>()
         ));
         UserStoryStore.getInstance().addUserStory(new UserStory(
@@ -105,6 +107,7 @@ public class UpdateUserStoryPanel extends JFrame {
                 "Assigned",
                 "Ready for Test",
                 "Conduct more research",
+                new ArrayList<>(),
                 new ArrayList<>()
         ));
         UserStoryStore.getInstance().addUserStory(new UserStory(
@@ -115,6 +118,7 @@ public class UpdateUserStoryPanel extends JFrame {
                 "Unassigned",
                 "Completed",
                 "Reevaluate Requirements",
+                new ArrayList<>(),
                 new ArrayList<>()
         ));
 

@@ -15,11 +15,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserStoryListPane extends JFrame implements BaseComponent {
+
+    private List<UserStoryWidget> widgets = new ArrayList<>();
+
     public UserStoryListPane() {
         this.init();
     }
-
-    private List<UserStoryWidget> widgets = new ArrayList<>();
 
     @Override
     public void init() {
@@ -33,7 +34,8 @@ public class UserStoryListPane extends JFrame implements BaseComponent {
         myJpanel.setLayout(myGridbagLayout);
 
         for (UserStory userStory : UserStoryStore.getInstance().getUserStories()) {
-            widgets.add(new UserStoryWidget(userStory));
+            UserStoryWidget widget = new UserStoryWidget(userStory);
+            widgets.add(widget);
         }
 
         JPanel subPanel = new JPanel();
@@ -41,7 +43,7 @@ public class UserStoryListPane extends JFrame implements BaseComponent {
         int i = 0;
 
         for (UserStoryWidget widget : widgets) {
-            widget.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5)); // Reduced padding around each widget
+            widget.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
             subPanel.add(
                 widget,
                 new CustomConstraints(
@@ -76,7 +78,7 @@ public class UserStoryListPane extends JFrame implements BaseComponent {
                         UserStory userStory = form.getUserStoryObject();
                         UserStoryStore.getInstance().addUserStory(userStory);
                         UserStoryWidget newWidget = new UserStoryWidget(userStory);
-                        newWidget.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5)); 
+                        newWidget.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
                         widgets.add(newWidget);
 
                         subPanel.add(newWidget, new CustomConstraints(
