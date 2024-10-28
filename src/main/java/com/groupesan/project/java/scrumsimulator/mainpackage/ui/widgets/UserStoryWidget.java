@@ -44,7 +44,7 @@ public class UserStoryWidget extends JPanel implements BaseComponent {
         isAssigned = createLabel(userStory.getAssignStatus());
         status = createLabel(userStory.getStatus());
         solution = createLabel(userStory.getSolution());
-        blockerLabel = createLabel(getFirstBlocker());
+        blockerLabel = createLabel(getAllBlockers());
         blockerStatusLabel = createLabel(userStory.isBlockerResolved() ? "Blocker: Resolved" : "Blocker: Unresolved");
 
         setLayout(new GridBagLayout());
@@ -97,8 +97,14 @@ public class UserStoryWidget extends JPanel implements BaseComponent {
         init();
     }
 
-    private String getFirstBlocker() {
+    private String getAllBlockers() {
         List<String> blockers = userStory.getBlockers();
-        return blockers.isEmpty() ? "No Blocker" : blockers.get(0);
+        return blockers.isEmpty() ? "No Blocker" : String.join(", ", blockers);
+    }
+
+    public void setBlockerLabel(String blocker) {
+        blockerLabel.setText(getAllBlockers());
+        revalidate();
+        repaint();
     }
 }

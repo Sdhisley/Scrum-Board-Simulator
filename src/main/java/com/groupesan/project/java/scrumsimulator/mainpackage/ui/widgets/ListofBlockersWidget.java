@@ -7,6 +7,8 @@ import com.groupesan.project.java.scrumsimulator.mainpackage.impl.UserStoryStore
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ListofBlockersWidget extends JPanel implements BaseComponent {
 
@@ -18,8 +20,12 @@ public class ListofBlockersWidget extends JPanel implements BaseComponent {
     private DefaultListModel<String> userStoryListModel;
     private JList<String> userStoryList;
 
+    // Map to track UserStory and its corresponding UserStoryWidget
+    private Map<UserStory, UserStoryWidget> userStoryWidgetMap;
+
     public ListofBlockersWidget() {
         blockerStore = BlockerStore.getInstance();
+        userStoryWidgetMap = new HashMap<>();
         initUserStories();
         this.init();
     }
@@ -27,7 +33,9 @@ public class ListofBlockersWidget extends JPanel implements BaseComponent {
     private void initUserStories() {
         userStoryListModel = new DefaultListModel<>();
         for (UserStory userStory : UserStoryStore.getInstance().getUserStories()) {
-            userStoryListModel.addElement(userStory.toString());
+            userStoryListModel.addElement(userStory.getName());
+            // Assume each UserStory has a corresponding UserStoryWidget
+            userStoryWidgetMap.put(userStory, new UserStoryWidget(userStory));
         }
         userStoryList = new JList<>(userStoryListModel);
     }
@@ -81,20 +89,21 @@ public class ListofBlockersWidget extends JPanel implements BaseComponent {
 
         if (selectedBlockerRow >= 0 && selectedUserStoryIndex >= 0) {
             ListofBlocker selectedBlocker = blockerStore.getBlockers().get(selectedBlockerRow);
+            String selectedUserStoryName = userStoryListModel.get(selectedUserStoryIndex);
 
-            if (selectedBlocker.getBlockerType() == ListofBlocker.BlockerType.NEEDS_MORE_INFO 
-                    && !selectedBlocker.getUserStories().isEmpty()) {
-                JOptionPane.showMessageDialog(
-                    this, 
-                    "Please resolve the current spike before assigning another user story."
-                );
-                return;
+            UserStory selectedUserStory = UserStoryStore.getInstance().findUserStoryByName(selectedUserStoryName); 
+            if (selectedUserStory != null) {
+                selectedUserStory.addBlocker(selectedBlocker.getBlockerType().toString());
+
+                UserStoryWidget userStoryWidget = findUserStoryWidget(selectedUserStory);
+                if (userStoryWidget != null) {
+                    userStoryWidget.setBlockerLabel(selectedBlocker.getBlockerType().toString());
+                }
+
+                selectedBlocker.addUserStory(selectedUserStoryName);
+                blockerTable.setValueAt(String.join(", ", selectedBlocker.getUserStories()), selectedBlockerRow, 1);
+                updateStartSpikeButton();
             }
-
-            String selectedUserStory = userStoryListModel.get(selectedUserStoryIndex);
-            selectedBlocker.addUserStory(selectedUserStory);
-            blockerTable.setValueAt(String.join(", ", selectedBlocker.getUserStories()), selectedBlockerRow, 1);
-            updateStartSpikeButton();
         } else {
             JOptionPane.showMessageDialog(this, "Please select a blocker and a user story.");
         }
@@ -105,6 +114,21 @@ public class ListofBlockersWidget extends JPanel implements BaseComponent {
 
         if (selectedBlockerRow >= 0) {
             ListofBlocker selectedBlocker = blockerStore.getBlockers().get(selectedBlockerRow);
+            
+            // Remove blocker from each UserStory in the blocker
+            for (String userStoryName : selectedBlocker.getUserStories()) {
+                UserStory userStory = UserStoryStore.getInstance().findUserStoryByName(userStoryName);
+                if (userStory != null) {
+                    userStory.removeBlocker(selectedBlocker.getBlockerType().toString()); // Remove blocker
+
+                    UserStoryWidget userStoryWidget = findUserStoryWidget(userStory);
+                    if (userStoryWidget != null) {
+                        userStoryWidget.setBlockerLabel(userStory.getBlockers().isEmpty() ? "No Blocker" : String.join(", ", userStory.getBlockers()));
+                    }
+                }
+            }
+
+            // Clear assignments in the blocker
             selectedBlocker.getUserStories().clear();
             blockerTable.setValueAt("", selectedBlockerRow, 1);
             updateStartSpikeButton();
@@ -127,5 +151,9 @@ public class ListofBlockersWidget extends JPanel implements BaseComponent {
 
     private void startSpike() {
         JOptionPane.showMessageDialog(this, "Spike activity started for blocker type 'NEEDS_MORE_INFO'.");
+    }
+
+    private UserStoryWidget findUserStoryWidget(UserStory userStory) {
+        return userStoryWidgetMap.get(userStory);  // Retrieves UserStoryWidget by UserStory
     }
 }
