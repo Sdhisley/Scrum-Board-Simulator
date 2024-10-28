@@ -2,13 +2,16 @@ package com.groupesan.project.java.scrumsimulator.mainpackage.ui.widgets;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets; // Import Insets for padding
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.List;
+
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
 import com.groupesan.project.java.scrumsimulator.mainpackage.impl.UserStory;
 import com.groupesan.project.java.scrumsimulator.mainpackage.ui.panels.EditUserStoryForm;
-import com.groupesan.project.java.scrumsimulator.mainpackage.utils.CustomConstraints;
 
 public class UserStoryWidget extends JPanel implements BaseComponent {
 
@@ -20,6 +23,7 @@ public class UserStoryWidget extends JPanel implements BaseComponent {
     private JLabel isAssigned;
     private JLabel status;
     private JLabel solution;
+    private JLabel blockerLabel;  // New label for blocker
 
     private transient UserStory userStory;
     private boolean isDialogOpen = false;
@@ -32,6 +36,7 @@ public class UserStoryWidget extends JPanel implements BaseComponent {
     public void init() {
         removeAll();
 
+        // Initialize labels for user story properties
         id = createLabel(userStory.getId().toString());
         points = createLabel(Double.toString(userStory.getPointValue()));
         name = createLabel(userStory.getName());
@@ -41,17 +46,28 @@ public class UserStoryWidget extends JPanel implements BaseComponent {
         status = createLabel(userStory.getStatus());
         solution = createLabel(userStory.getSolution());
 
+        // Initialize blocker label
+        blockerLabel = createLabel(getFirstBlocker());
+
+        // Layout setup
         GridBagLayout layout = new GridBagLayout();
         setLayout(layout);
 
-        add(id, new CustomConstraints(0, 0, GridBagConstraints.WEST, 0.1, 0.0, GridBagConstraints.HORIZONTAL));
-        add(points, new CustomConstraints(1, 0, GridBagConstraints.WEST, 0.1, 0.0, GridBagConstraints.HORIZONTAL));
-        add(name, new CustomConstraints(2, 0, GridBagConstraints.WEST, 0.2, 0.0, GridBagConstraints.HORIZONTAL));
-        add(desc, new CustomConstraints(3, 0, GridBagConstraints.WEST, 0.7, 0.0, GridBagConstraints.HORIZONTAL));
-        add(businessValue, new CustomConstraints(4, 0, GridBagConstraints.WEST, 0.1, 0.0, GridBagConstraints.HORIZONTAL));
-        add(isAssigned, new CustomConstraints(5, 0, GridBagConstraints.WEST, 0.1, 0.0, GridBagConstraints.HORIZONTAL));
-        add(status, new CustomConstraints(6, 0, GridBagConstraints.WEST, 0.1, 0.0, GridBagConstraints.HORIZONTAL));
-        add(solution, new CustomConstraints(7, 0, GridBagConstraints.WEST, 0.1, 0.0, GridBagConstraints.HORIZONTAL));
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10); // Add padding
+
+        gbc.gridx = 0; gbc.gridy = 0; gbc.weightx = 0.1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        add(id, gbc);
+
+        gbc.gridx = 1; add(points, gbc);
+        gbc.gridx = 2; add(name, gbc);
+        gbc.gridx = 3; gbc.weightx = 0.7; add(desc, gbc);
+        gbc.gridx = 4; gbc.weightx = 0.1; add(businessValue, gbc);
+        gbc.gridx = 5; add(isAssigned, gbc);
+        gbc.gridx = 6; add(status, gbc);
+        gbc.gridx = 7; add(solution, gbc);
+        gbc.gridx = 8; add(blockerLabel, gbc);
 
         revalidate();
         repaint();
@@ -69,9 +85,7 @@ public class UserStoryWidget extends JPanel implements BaseComponent {
     }
 
     private void openEditDialog() {
-        if (isDialogOpen) {
-            return;
-        }
+        if (isDialogOpen) return;
         isDialogOpen = true;
         EditUserStoryForm form = new EditUserStoryForm(userStory);
         form.setVisible(true);
@@ -86,16 +100,11 @@ public class UserStoryWidget extends JPanel implements BaseComponent {
     }
 
     private void updateUserStoryDetails() {
-        id.setText(userStory.getId().toString());
-        points.setText(Double.toString(userStory.getPointValue()));
-        name.setText(userStory.getName());
-        desc.setText(userStory.getDescription());
-        businessValue.setText(Double.toString(userStory.getBusinessValue()));
-        isAssigned.setText(userStory.getAssignStatus());
-        status.setText(userStory.getStatus());
-        solution.setText(userStory.getSolution());
+        this.init();
+    }
 
-        revalidate();
-        repaint();
+    private String getFirstBlocker() {
+        List<String> blockers = userStory.getBlockers();
+        return blockers.isEmpty() ? "No Blocker" : blockers.get(0);
     }
 }

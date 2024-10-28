@@ -1,5 +1,8 @@
 package com.groupesan.project.java.scrumsimulator.mainpackage.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class UserStoryFactory {
 
     private static UserStoryFactory userStoryFactory;
@@ -14,7 +17,8 @@ public class UserStoryFactory {
     private UserStoryFactory() {}
 
     public UserStory createNewUserStory(String name, String description, double pointValue, double businessValue, String assignStatus) {
-        UserStory newUS = new UserStory(name, description, pointValue, businessValue, assignStatus,"New","NA");//defaulted to New for now 
+        List<String> blockers = new ArrayList<>();
+        UserStory newUS = new UserStory(name, description, pointValue, businessValue, assignStatus, "New", "NA", blockers);
         return newUS;
     }
 }

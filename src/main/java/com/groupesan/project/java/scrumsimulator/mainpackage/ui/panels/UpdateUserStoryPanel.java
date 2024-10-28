@@ -2,8 +2,8 @@ package com.groupesan.project.java.scrumsimulator.mainpackage.ui.panels;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.List;
-
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -11,7 +11,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
-
 import com.groupesan.project.java.scrumsimulator.mainpackage.impl.UserStory;
 import com.groupesan.project.java.scrumsimulator.mainpackage.impl.UserStoryStore;
 import com.groupesan.project.java.scrumsimulator.mainpackage.state.UserStoryStateManager;
@@ -41,7 +40,6 @@ public class UpdateUserStoryPanel extends JFrame {
         userStoryLabel.setBounds(10, 20, 120, 25);
         panel.add(userStoryLabel);
 
-        // Get user stories from the UserStoryStore
         List<UserStory> userStories = UserStoryStore.getInstance().getUserStories();
         JComboBox<UserStory> userStoryComboBox = new JComboBox<>(userStories.toArray(new UserStory[0]));
         userStoryComboBox.setBounds(150, 20, 200, 25);
@@ -66,13 +64,9 @@ public class UpdateUserStoryPanel extends JFrame {
                 UserStory selectedUserStory = (UserStory) userStoryComboBox.getSelectedItem();
                 String selectedStatus = (String) statusComboBox.getSelectedItem();
 
-                 if (selectedUserStory != null && selectedStatus != null) {
-                    // Update the status of the selected user story
+                if (selectedUserStory != null && selectedStatus != null) {
                     selectedUserStory.setStatus(selectedStatus);
-
-                    // Optionally: Call UserStoryStateManager if you need to manage transitions
-                    UserStoryStateManager.updateUserStoryStatus(
-                            selectedUserStory.getDescription(), selectedStatus);
+                    UserStoryStateManager.updateUserStoryStatus(selectedUserStory.getDescription(), selectedStatus);
                     JOptionPane.showMessageDialog(null, "Status updated successfully!");
                     dispose();
                 } else {
@@ -82,9 +76,7 @@ public class UpdateUserStoryPanel extends JFrame {
         });
     }
 
-    // For testing purposes, you can add a main method to display the panel
     public static void main(String[] args) {
-        // Adding some dummy user stories for demonstration
         UserStoryStore.getInstance().addUserStory(new UserStory(
                 "Login Feature",
                 "User can log in",
@@ -92,7 +84,8 @@ public class UpdateUserStoryPanel extends JFrame {
                 8,
                 "Assigned",
                 "New",
-                "NA"
+                "NA",
+                new ArrayList<>()
         ));
         UserStoryStore.getInstance().addUserStory(new UserStory(
                 "Payment Integration",
@@ -101,7 +94,8 @@ public class UpdateUserStoryPanel extends JFrame {
                 13,
                 "Unassigned",
                 "In Progress",
-                "Add more developers"
+                "Add more developers",
+                new ArrayList<>()
         ));
         UserStoryStore.getInstance().addUserStory(new UserStory(
                 "User Profile",
@@ -110,7 +104,8 @@ public class UpdateUserStoryPanel extends JFrame {
                 5,
                 "Assigned",
                 "Ready for Test",
-                "Conduct more research"
+                "Conduct more research",
+                new ArrayList<>()
         ));
         UserStoryStore.getInstance().addUserStory(new UserStory(
                 "Search Functionality",
@@ -119,10 +114,10 @@ public class UpdateUserStoryPanel extends JFrame {
                 13,
                 "Unassigned",
                 "Completed",
-                "Reevaluate Requirements"
+                "Reevaluate Requirements",
+                new ArrayList<>()
         ));
 
-        // Display the UpdateUserStoryPanel
         SwingUtilities.invokeLater(() -> new UpdateUserStoryPanel().setVisible(true));
     }
 }

@@ -22,14 +22,16 @@ public class UserStory extends ScrumObject {
     private String solution;
     private UserStoryState state;
     private Player owner;
+    private List<String> blockers;  // List to store blockers
 
     // Constructor with only essential parameters
     public UserStory(String name, double pointValue, double businessValue, String assignStatus) {
-        this(name, "", pointValue, businessValue, assignStatus, "New", "NA"); // Default to "New" status
+        this(name, "", pointValue, businessValue, assignStatus, "New", "NA", new ArrayList<>()); // Default to "New" status and empty blockers list
     }
 
     // Full constructor with all fields
-    public UserStory(String name, String description, double pointValue, double businessValue, String assignStatus, String status, String solution) {
+    public UserStory(String name, String description, double pointValue, double businessValue, 
+                     String assignStatus, String status, String solution, List<String> blockers) {
         this.name = name;
         this.description = description;
         this.pointValue = pointValue;
@@ -38,6 +40,7 @@ public class UserStory extends ScrumObject {
         this.status = status;
         this.solution = solution;
         this.state = new UserStoryUnselectedState(this); // Default state
+        this.blockers = blockers;  // Initialize blockers
         register();
     }
 
@@ -64,7 +67,6 @@ public class UserStory extends ScrumObject {
         this.name = name;
     }
 
-    // Additional Getters and Setters
     public String getDescription() {
         return description;
     }
@@ -113,11 +115,11 @@ public class UserStory extends ScrumObject {
         this.status = status;
     }
 
-    public String getSolution(){
+    public String getSolution() {
         return solution;
     }
 
-    public void setSolution(String solution){
+    public void setSolution(String solution) {
         this.solution = solution;
     }
 
@@ -144,6 +146,25 @@ public class UserStory extends ScrumObject {
 
     public List<ScrumObject> getChildren() {
         return new ArrayList<>();
+    }
+
+    // Blockers management methods
+    public List<String> getBlockers() {
+        return blockers;
+    }
+
+    public void setBlockers(List<String> blockers) {
+        this.blockers = blockers;
+    }
+
+    public void addBlocker(String blocker) {
+        if (!blockers.contains(blocker)) {
+            blockers.add(blocker);
+        }
+    }
+
+    public void removeBlocker(String blocker) {
+        blockers.remove(blocker);
     }
 
     @Override
