@@ -20,7 +20,6 @@ import javax.swing.JScrollPane;
 
 import com.groupesan.project.java.scrumsimulator.mainpackage.impl.BlockerStore;
 import com.groupesan.project.java.scrumsimulator.mainpackage.impl.ListofBlocker;
-import com.groupesan.project.java.scrumsimulator.mainpackage.impl.ListofSolution;
 import com.groupesan.project.java.scrumsimulator.mainpackage.impl.ListofSolution.SolutionType;
 import com.groupesan.project.java.scrumsimulator.mainpackage.impl.SolutionStore;
 
@@ -77,6 +76,11 @@ public class ListofSolutionsWidget extends JPanel {
                 solutionDropdown.setPreferredSize(new Dimension(180, 20));
                 solutionDropdown.setMaximumSize(new Dimension(180, 20));
                 solutionSelectors.put(blocker, solutionDropdown);
+
+                SolutionType savedSolution = solutionStore.getSolutionForBlocker(blocker);
+                if (savedSolution != null) {
+                    solutionDropdown.setSelectedItem(savedSolution);
+                }
                 
                 solutionDropdown.addActionListener(new ActionListener() {
                     @Override
