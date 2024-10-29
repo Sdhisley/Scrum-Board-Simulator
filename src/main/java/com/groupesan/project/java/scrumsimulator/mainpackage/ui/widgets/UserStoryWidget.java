@@ -33,6 +33,7 @@ public class UserStoryWidget extends JPanel implements BaseComponent {
         init();
     }
 
+    @Override
     public void init() {
         removeAll();
 
@@ -45,7 +46,7 @@ public class UserStoryWidget extends JPanel implements BaseComponent {
         status = createLabel(userStory.getStatus());
         solution = createLabel(userStory.getSolution());
         blockerLabel = createLabel(getAllBlockers());
-        blockerStatusLabel = createLabel(userStory.isBlockerResolved() ? "Blocker: Resolved" : "Blocker: Unresolved");
+        blockerStatusLabel = createLabel(getBlockerStatusText());
 
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -72,7 +73,9 @@ public class UserStoryWidget extends JPanel implements BaseComponent {
         label.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                openEditDialog();
+                if (e.getClickCount() == 2) {  // Double-click to open edit dialog
+                    openEditDialog();
+                }
             }
         });
         return label;
@@ -102,9 +105,18 @@ public class UserStoryWidget extends JPanel implements BaseComponent {
         return blockers.isEmpty() ? "No Blocker" : String.join(", ", blockers);
     }
 
-    public void setBlockerLabel(String blocker) {
-        blockerLabel.setText(getAllBlockers());
+    private String getBlockerStatusText() {
+        return userStory.isBlockerResolved() ? "Blocker: Resolved" : "Blocker: Unresolved";
+    }
+
+    public void updateBlockerStatus() {
+        blockerStatusLabel.setText(getBlockerStatusText());
         revalidate();
         repaint();
+    }
+
+    public void setBlockerLabel(String blocker) {
+        blockerLabel.setText(getAllBlockers());
+        updateBlockerStatus(); // Also update blocker status when blockers change
     }
 }
