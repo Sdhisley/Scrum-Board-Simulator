@@ -173,23 +173,23 @@ public class DemoPane extends JFrame implements BaseComponent {
                 new CustomConstraints(
                         1, 1, GridBagConstraints.WEST, 1.0, 1.0, GridBagConstraints.HORIZONTAL));
 
-        JButton probabilitySelectionButton = new JButton("Select Probability");
-        probabilitySelectionButton.addActionListener(
-                new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JFrame probabilitySelectionFrame = new JFrame("List of Solutions for Blockers");
-                probabilitySelectionFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                probabilitySelectionFrame.setSize(800, 400);
-                probabilitySelectionFrame.add(new SelectProbabilityPane());
-                probabilitySelectionFrame.setVisible(true);
-            }
-        });
+        // JButton probabilitySelectionButton = new JButton("Select Probability");
+        // probabilitySelectionButton.addActionListener(
+        //         new ActionListener() {
+        //     @Override
+        //     public void actionPerformed(ActionEvent e) {
+        //         JFrame probabilitySelectionFrame = new JFrame("List of Solutions for Blockers");
+        //         probabilitySelectionFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        //         probabilitySelectionFrame.setSize(800, 400);
+        //         // probabilitySelectionFrame.add(new SelectProbabilityPane());
+        //         probabilitySelectionFrame.setVisible(true);
+        //     }
+        // });
 
-        myJpanel.add(
-            probabilitySelectionButton,
-                new CustomConstraints(
-                        2, 1, GridBagConstraints.WEST, 1.0, 1.0, GridBagConstraints.HORIZONTAL));
+        // myJpanel.add(
+        //     probabilitySelectionButton,
+        //         new CustomConstraints(
+        //                 2, 1, GridBagConstraints.WEST, 1.0, 1.0, GridBagConstraints.HORIZONTAL));
 
         // New button for Variant Simulation UI
         JButton variantSimulationUIButton = new JButton("Variant Simulation UI");

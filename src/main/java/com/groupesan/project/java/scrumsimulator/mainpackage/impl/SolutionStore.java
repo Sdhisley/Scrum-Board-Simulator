@@ -11,10 +11,12 @@ public class SolutionStore {
     private static SolutionStore instance;
     private List<ListofSolution> solutions;
     private Map<ListofBlocker, SolutionType> blockerSolutions;
+    private Map<ListofBlocker, String> solutionProbabilities; // Store for solution probabilities
 
     private SolutionStore() {
         solutions = new ArrayList<>();
         blockerSolutions = new HashMap<>();
+        solutionProbabilities = new HashMap<>();
         initSolutions();
     }
 
@@ -43,9 +45,18 @@ public class SolutionStore {
         blockerSolutions.put(blocker, solutionType);
     }
 
-    // Method to get the solution associated with a specific blocker
     public SolutionType getSolutionForBlocker(ListofBlocker blocker) {
         return blockerSolutions.get(blocker);
+    }
+
+    // Method to set the solution probability for a specific blocker
+    public void setSolutionProbability(ListofBlocker blocker, String probability) {
+        solutionProbabilities.put(blocker, probability);
+    }
+
+    // Method to get the solution probability for a specific blocker
+    public String getSolutionProbability(ListofBlocker blocker) {
+        return solutionProbabilities.getOrDefault(blocker, "0%");
     }
 
     // Optional: Method to get all blocker-solution mappings
