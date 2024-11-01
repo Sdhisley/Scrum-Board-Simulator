@@ -22,8 +22,8 @@ public class UserStoryWidget extends JPanel implements BaseComponent {
     private JLabel businessValue;
     private JLabel isAssigned;
     private JLabel status;
-    private JLabel solution;
     private JLabel blockerLabel;
+    private JLabel solution;
     private JLabel blockerStatusLabel;
     private transient UserStory userStory;
     private boolean isDialogOpen = false;
@@ -44,8 +44,8 @@ public class UserStoryWidget extends JPanel implements BaseComponent {
         businessValue = createLabel(Double.toString(userStory.getBusinessValue()));
         isAssigned = createLabel(userStory.getAssignStatus());
         status = createLabel(userStory.getStatus());
-        solution = createLabel(userStory.getSolution());
-        blockerLabel = createLabel(getAllBlockers());
+        blockerLabel = createLabel(getAllBlockers());  // Blocker label
+        solution = createLabel(userStory.getSolution());  // Solution label
         blockerStatusLabel = createLabel(getBlockerStatusText());
 
         setLayout(new GridBagLayout());
@@ -60,8 +60,8 @@ public class UserStoryWidget extends JPanel implements BaseComponent {
         gbc.gridx = 4; gbc.weightx = 0.1; add(businessValue, gbc);
         gbc.gridx = 5; gbc.weightx = 0.2; add(isAssigned, gbc);
         gbc.gridx = 6; gbc.weightx = 0.1; add(status, gbc);
-        gbc.gridx = 7; gbc.weightx = 0.2; add(solution, gbc);
-        gbc.gridx = 8; gbc.weightx = 0.2; add(blockerLabel, gbc);
+        gbc.gridx = 7; gbc.weightx = 0.2; add(blockerLabel, gbc);  // Blocker label before solution
+        gbc.gridx = 8; gbc.weightx = 0.2; add(solution, gbc);      // Solution label
         gbc.gridx = 9; gbc.weightx = 0.3; add(blockerStatusLabel, gbc);
 
         revalidate();
