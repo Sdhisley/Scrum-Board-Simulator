@@ -3,8 +3,6 @@ package com.groupesan.project.java.scrumsimulator.mainpackage.ui.panels;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -14,10 +12,15 @@ import com.groupesan.project.java.scrumsimulator.mainpackage.core.Player;
 import com.groupesan.project.java.scrumsimulator.mainpackage.core.ScrumRole;
 import com.groupesan.project.java.scrumsimulator.mainpackage.state.SimulationManager;
 import com.groupesan.project.java.scrumsimulator.mainpackage.state.SimulationStateManager;
+import com.groupesan.project.java.scrumsimulator.mainpackage.ui.dialogs.simulation.ParticipantsPage;
+import com.groupesan.project.java.scrumsimulator.mainpackage.ui.utils.DataModel;
 import com.groupesan.project.java.scrumsimulator.mainpackage.ui.widgets.BaseComponent;
 import com.groupesan.project.java.scrumsimulator.mainpackage.ui.widgets.ListofBlockersWidget;
 import com.groupesan.project.java.scrumsimulator.mainpackage.ui.widgets.ListofSolutionsWidget;
 import com.groupesan.project.java.scrumsimulator.mainpackage.utils.CustomConstraints;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DemoPane extends JFrame implements BaseComponent {
 
@@ -42,226 +45,89 @@ public class DemoPane extends JFrame implements BaseComponent {
         myJpanel.setBorder(new EmptyBorder(10, 10, 10, 10));
         myJpanel.setLayout(myGridbagLayout);
 
+        // Add existing buttons and components with their functionalities
+
         JButton sprintsButton = new JButton("Sprints");
-        sprintsButton.addActionListener(
-                new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                SprintListPane form = new SprintListPane();
-                form.setVisible(true);
-            }
-        });
-
-        SimulationStateManager simulationStateManager = new SimulationStateManager();
-        SimulationPanel simulationPanel = new SimulationPanel(simulationStateManager);
-        myJpanel.add(
-                simulationPanel,
-                new CustomConstraints(
-                        2, 0, GridBagConstraints.WEST, 1.0, 1.0, GridBagConstraints.HORIZONTAL));
-
-        myJpanel.add(
-                sprintsButton,
-                new CustomConstraints(
-                        0, 0, GridBagConstraints.WEST, 1.0, 1.0, GridBagConstraints.HORIZONTAL));
+        sprintsButton.addActionListener(e -> new SprintListPane().setVisible(true));
+        myJpanel.add(sprintsButton, new CustomConstraints(0, 0, GridBagConstraints.WEST, 1.0, 1.0, GridBagConstraints.HORIZONTAL));
 
         JButton userStoriesButton = new JButton("User Stories");
-        userStoriesButton.addActionListener(
-                new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                UserStoryListPane form = new UserStoryListPane();
-                form.setVisible(true);
-            }
-        });
-
-        myJpanel.add(
-                userStoriesButton,
-                new CustomConstraints(
-                        1, 0, GridBagConstraints.WEST, 1.0, 1.0, GridBagConstraints.HORIZONTAL));
+        userStoriesButton.addActionListener(e -> new UserStoryListPane().setVisible(true));
+        myJpanel.add(userStoriesButton, new CustomConstraints(1, 0, GridBagConstraints.WEST, 1.0, 1.0, GridBagConstraints.HORIZONTAL));
 
         JButton updateStoryStatusButton = new JButton("Update User Story Status");
-        updateStoryStatusButton.addActionListener(
-                new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                UpdateUserStoryPanel form = new UpdateUserStoryPanel();
-                form.setVisible(true);
-            }
-        });
+        updateStoryStatusButton.addActionListener(e -> new UpdateUserStoryPanel().setVisible(true));
+        myJpanel.add(updateStoryStatusButton, new CustomConstraints(3, 0, GridBagConstraints.WEST, 1.0, 1.0, GridBagConstraints.HORIZONTAL));
 
-        myJpanel.add(
-                updateStoryStatusButton,
-                new CustomConstraints(
-                        3, 0, GridBagConstraints.WEST, 1.0, 1.0, GridBagConstraints.HORIZONTAL));
-
-        // Simulation button for Demo
         JButton simulationButton = new JButton("Add User");
-        simulationButton.addActionListener(
-                new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                SimulationPane simulationPane = new SimulationPane();
-                simulationPane.setVisible(true);
-            }
-        });
+        simulationButton.addActionListener(e -> new SimulationPane().setVisible(true));
+        myJpanel.add(simulationButton, new CustomConstraints(7, 0, GridBagConstraints.WEST, 1.0, 1.0, GridBagConstraints.HORIZONTAL));
 
-        myJpanel.add(
-                simulationButton,
-                new CustomConstraints(
-                        7, 0, GridBagConstraints.WEST, 1.0, 1.0, GridBagConstraints.HORIZONTAL));
-
-        // Modify Simulation button
         JButton modifySimulationButton = new JButton("Modify Simulation");
-        modifySimulationButton.addActionListener(
-                new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                SimulationManager simulationManager = new SimulationManager();
-                ModifySimulationPane modifySimulationPane
-                        = new ModifySimulationPane(simulationManager);
-                modifySimulationPane.setVisible(true);
-            }
+        modifySimulationButton.addActionListener(e -> {
+            SimulationManager simulationManager = new SimulationManager();
+            new ModifySimulationPane(simulationManager).setVisible(true);
         });
+        myJpanel.add(modifySimulationButton, new CustomConstraints(5, 0, GridBagConstraints.WEST, 1.0, 1.0, GridBagConstraints.HORIZONTAL));
 
-        // Add the button to the panel
-        myJpanel.add(
-                modifySimulationButton,
-                new CustomConstraints(
-                        5, 0, GridBagConstraints.WEST, 1.0, 1.0, GridBagConstraints.HORIZONTAL));
-
-        // *** Role Selection now through SimulationUI ***
-        // JButton roleSelectionButton = new JButton("Role Selection");
-        // roleSelectionButton.addActionListener(
-        //         new ActionListener() {
-        //             @Override
-        //             public void actionPerformed(ActionEvent e) {
-        //                 RoleSelectionPane roleSelectionPane = new RoleSelectionPane();
-        //                 roleSelectionPane.setVisible(true);
-        //             }
-        //         });
-        // myJpanel.add(
-        //         roleSelectionButton,
-        //         new CustomConstraints(
-        //                 4, 0, GridBagConstraints.WEST, 1.0, 1.0, GridBagConstraints.HORIZONTAL));
-        // *** Role Selection now through SimulationUI ***
-        // Join Simulation button
         JButton joinSimulationButton = new JButton("Join Simulation");
-        joinSimulationButton.addActionListener(
-                e -> {
-                    SimulationUI simulationUserInterface = new SimulationUI();
-                    simulationUserInterface.setVisible(true);
-                });
+        joinSimulationButton.addActionListener(e -> new SimulationUI().setVisible(true));
+        myJpanel.add(joinSimulationButton, new CustomConstraints(6, 0, GridBagConstraints.WEST, 1.0, 1.0, GridBagConstraints.HORIZONTAL));
 
-        myJpanel.add(
-                joinSimulationButton,
-                new CustomConstraints(
-                        6, 0, GridBagConstraints.WEST, 1.0, 1.0, GridBagConstraints.HORIZONTAL));
-
-        // Simulation button for Demo
         JButton simulationSwitchRoleButton = new JButton("Switch Role");
-        simulationSwitchRoleButton.addActionListener(
-                new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                SimulationSwitchRolePane feedbackPanelUI = new SimulationSwitchRolePane();
-                feedbackPanelUI.setVisible(true);
-            }
-        });
+        simulationSwitchRoleButton.addActionListener(e -> new SimulationSwitchRolePane().setVisible(true));
+        myJpanel.add(simulationSwitchRoleButton, new CustomConstraints(1, 1, GridBagConstraints.WEST, 1.0, 1.0, GridBagConstraints.HORIZONTAL));
 
-        myJpanel.add(
-                simulationSwitchRoleButton,
-                new CustomConstraints(
-                        1, 1, GridBagConstraints.WEST, 1.0, 1.0, GridBagConstraints.HORIZONTAL));
+        // Add "Participants" button next to "Switch Role"
+        JButton participantsButton = new JButton("Participants");
+        participantsButton.addActionListener(e -> openParticipantsPage());
+        myJpanel.add(participantsButton, new CustomConstraints(2, 1, GridBagConstraints.WEST, 1.0, 1.0, GridBagConstraints.HORIZONTAL));
 
-        // JButton probabilitySelectionButton = new JButton("Select Probability");
-        // probabilitySelectionButton.addActionListener(
-        //         new ActionListener() {
-        //     @Override
-        //     public void actionPerformed(ActionEvent e) {
-        //         JFrame probabilitySelectionFrame = new JFrame("List of Solutions for Blockers");
-        //         probabilitySelectionFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        //         probabilitySelectionFrame.setSize(800, 400);
-        //         // probabilitySelectionFrame.add(new SelectProbabilityPane());
-        //         probabilitySelectionFrame.setVisible(true);
-        //     }
-        // });
-
-        // myJpanel.add(
-        //     probabilitySelectionButton,
-        //         new CustomConstraints(
-        //                 2, 1, GridBagConstraints.WEST, 1.0, 1.0, GridBagConstraints.HORIZONTAL));
-
-        // New button for Variant Simulation UI
         JButton variantSimulationUIButton = new JButton("Variant Simulation UI");
-        variantSimulationUIButton.addActionListener(
-                new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                VariantSimulationUI variantSimulationUI = new VariantSimulationUI();
-                variantSimulationUI.setVisible(true);
-            }
-        });
-
-        // Adding the button to the panel
-        myJpanel.add(
-                variantSimulationUIButton,
-                new CustomConstraints(
-                        3, 0, GridBagConstraints.WEST, 1.0, 1.0, GridBagConstraints.HORIZONTAL));
+        variantSimulationUIButton.addActionListener(e -> new VariantSimulationUI().setVisible(true));
+        myJpanel.add(variantSimulationUIButton, new CustomConstraints(3, 0, GridBagConstraints.WEST, 1.0, 1.0, GridBagConstraints.HORIZONTAL));
 
         JButton SprintUIButton = new JButton("US Selection UI");
-        SprintUIButton.addActionListener(
-                new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Load SprintUIPane
-                SprintUIPane sprintUIPane = new SprintUIPane(player);
-                sprintUIPane.setVisible(true);
-            }
-        });
+        SprintUIButton.addActionListener(e -> new SprintUIPane(player).setVisible(true));
+        myJpanel.add(SprintUIButton, new CustomConstraints(8, 0, GridBagConstraints.WEST, 1.0, 1.0, GridBagConstraints.HORIZONTAL));
 
-        // Adding the button to the panel
-        myJpanel.add(
-                SprintUIButton,
-                new CustomConstraints(
-                        8, 0, GridBagConstraints.WEST, 1.0, 1.0, GridBagConstraints.HORIZONTAL));
-
-        add(myJpanel);
         JButton blockersButton = new JButton("List of Blockers");
-        blockersButton.addActionListener(
-                new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JFrame blockersFrame = new JFrame("List of Blockers");
-                blockersFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                blockersFrame.setSize(800, 400);
-                blockersFrame.add(new ListofBlockersWidget());
-                blockersFrame.setVisible(true);
-            }
-        }
-        );
-        myJpanel.add(
-            blockersButton,
-            new CustomConstraints(
-                    9, 0, GridBagConstraints.WEST, 1.0, 1.0, GridBagConstraints.HORIZONTAL));
+        blockersButton.addActionListener(e -> {
+            JFrame blockersFrame = new JFrame("List of Blockers");
+            blockersFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            blockersFrame.setSize(800, 400);
+            blockersFrame.add(new ListofBlockersWidget());
+            blockersFrame.setVisible(true);
+        });
+        myJpanel.add(blockersButton, new CustomConstraints(9, 0, GridBagConstraints.WEST, 1.0, 1.0, GridBagConstraints.HORIZONTAL));
 
         JButton solutionsButton = new JButton("Solutions");
-        solutionsButton.addActionListener(
-                new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JFrame blockersFrame = new JFrame("List of Solutions for Blockers");
-                blockersFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                blockersFrame.setSize(800, 400);
-                blockersFrame.add(new ListofSolutionsWidget());
-                blockersFrame.setVisible(true);
-            }
+        solutionsButton.addActionListener(e -> {
+            JFrame solutionsFrame = new JFrame("List of Solutions for Blockers");
+            solutionsFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            solutionsFrame.setSize(800, 400);
+            solutionsFrame.add(new ListofSolutionsWidget());
+            solutionsFrame.setVisible(true);
         });
-        myJpanel.add(
-                solutionsButton,
-                new CustomConstraints(
-                        0, 1, GridBagConstraints.WEST, 1.0, 1.0, GridBagConstraints.HORIZONTAL));
+        myJpanel.add(solutionsButton, new CustomConstraints(0, 2, GridBagConstraints.WEST, 1.0, 1.0, GridBagConstraints.HORIZONTAL));
 
-// Add the button to your JPanel
+        // Add the panel to the frame
+        add(myJpanel);
+    }
 
+    private void openParticipantsPage() {
+        List<Player> players = new ArrayList<>();
+        List<ScrumRole> roles = new ArrayList<>();
+        roles.add(new ScrumRole("Developer"));
+        roles.add(new ScrumRole("Tester"));
+        DataModel<List<Player>> usersDataModel = new DataModel<>(players);
+        DataModel<List<ScrumRole>> rolesDataModel = new DataModel<>(roles);
+
+        JFrame participantsFrame = new JFrame("Participants");
+        ParticipantsPage participantsPage = new ParticipantsPage(usersDataModel, rolesDataModel);
+        participantsFrame.add(participantsPage.render());
+        participantsFrame.setSize(800, 600);
+        participantsFrame.setLocationRelativeTo(this);
+        participantsFrame.setVisible(true);
     }
 }
