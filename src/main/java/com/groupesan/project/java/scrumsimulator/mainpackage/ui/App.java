@@ -18,10 +18,7 @@ public class App {
                 new Runnable() {
                     @Override
                     public void run() {
-                        // Initialize User Stories in helper function now
                         initializeUserStories();
-
-                        // Load DemoPane
                         DemoPane form = new DemoPane();
                         form.setVisible(true);
                     }
@@ -29,28 +26,21 @@ public class App {
     }
 
     private void initializeUserStories() {
-        UserStory a =
-                UserStoryFactory.getInstance()
-                        .createNewUserStory("predefinedUS1", "description1", 1.0, 0.0, "Unassigned");
+        UserStory a = UserStoryFactory.getInstance().createNewUserStory("predefinedUS1", "description1", 1.0, 0.0, "Unassigned");
         a.doRegister();
         UserStoryStore.getInstance().addUserStory(a);
 
-        UserStory b =
-                UserStoryFactory.getInstance()
-                        .createNewUserStory("predefinedUS2", "description2", 2.0, 3.0, "Unassigned");
+        UserStory b = UserStoryFactory.getInstance().createNewUserStory("predefinedUS2", "description2", 2.0, 3.0, "Unassigned");
         b.doRegister();
         UserStoryStore.getInstance().addUserStory(b);
 
-        UserStory c =
-                UserStoryFactory.getInstance()
-                        .createNewUserStory("predefinedUS3", "description3", 3.0, 7.0, "Unassigned");
+        UserStory c = UserStoryFactory.getInstance().createNewUserStory("predefinedUS3", "description3", 3.0, 7.0, "Unassigned");
         c.doRegister();
         UserStoryStore.getInstance().addUserStory(c);
     }
 
     private void loadTheme() {
         try {
-            // TODO support setting theme from a configuration file
             UIManager.setLookAndFeel(new FlatLightLaf());
         } catch (UnsupportedLookAndFeelException e) {
             throw new RuntimeException(e);

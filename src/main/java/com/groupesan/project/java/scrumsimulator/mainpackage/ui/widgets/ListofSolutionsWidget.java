@@ -4,19 +4,10 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
+import javax.swing.*;
 
 import com.groupesan.project.java.scrumsimulator.mainpackage.impl.BlockerStore;
 import com.groupesan.project.java.scrumsimulator.mainpackage.impl.ListofBlocker;
@@ -40,7 +31,7 @@ public class ListofSolutionsWidget extends JPanel {
     private void initUI() {
         setLayout(new BorderLayout());
 
-        JPanel mainPanel = new JPanel(new GridLayout(1, 5, 5, 0)); // Reduced column gap
+        JPanel mainPanel = new JPanel(new GridLayout(1, 5, 5, 0));
 
         JPanel userStoriesPanel = new JPanel();
         userStoriesPanel.setLayout(new BoxLayout(userStoriesPanel, BoxLayout.Y_AXIS));
@@ -62,14 +53,12 @@ public class ListofSolutionsWidget extends JPanel {
         solutionProbabilitySelectPanel.setLayout(new BoxLayout(solutionProbabilitySelectPanel, BoxLayout.Y_AXIS));
         solutionProbabilitySelectPanel.setBorder(BorderFactory.createTitledBorder("Solution Probability"));
 
-        // Define percentage values as strings
         String[] percentageValues = {"10%", "20%", "30%", "40%", "50%", "60%", "70%", "80%", "90%", "100%"};
 
         List<ListofBlocker> blockers = blockerStore.getBlockers();
         for (ListofBlocker blocker : blockers) {
             if (!blocker.getUserStories().isEmpty()) {
 
-                // User Stories Column
                 JPanel userStoryGroupPanel = new JPanel();
                 userStoryGroupPanel.setLayout(new BoxLayout(userStoryGroupPanel, BoxLayout.Y_AXIS));
                 for (String userStory : blocker.getUserStories()) {
@@ -78,34 +67,27 @@ public class ListofSolutionsWidget extends JPanel {
                 }
                 userStoriesPanel.add(userStoryGroupPanel);
 
-                // Blocker Type Column
                 JLabel blockerLabel = new JLabel(blocker.getBlockerType().toString());
                 blockerLabel.setFont(new Font("Arial", Font.BOLD, 12));
                 blockerTypePanel.add(blockerLabel);
 
-                // Blocker Probability Column
                 JComboBox<String> blockerProbabilityDropdown = new JComboBox<>(percentageValues);
-                blockerProbabilityDropdown.setPreferredSize(new Dimension(100, 20)); // Reduced width
+                blockerProbabilityDropdown.setPreferredSize(new Dimension(100, 20));
                 blockerProbabilityDropdown.setMaximumSize(new Dimension(100, 20));
-                
-                // Set saved blocker probability
+
                 String savedBlockerProbability = blockerStore.getBlockerProbability(blocker);
                 if (savedBlockerProbability != null) {
                     blockerProbabilityDropdown.setSelectedItem(savedBlockerProbability);
                 }
 
-                blockerProbabilityDropdown.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        String selectedProbability = (String) blockerProbabilityDropdown.getSelectedItem();
-                        blockerStore.setBlockerProbability(blocker, selectedProbability); // Save selected probability
-                    }
+                blockerProbabilityDropdown.addActionListener(e -> {
+                    String selectedProbability = (String) blockerProbabilityDropdown.getSelectedItem();
+                    blockerStore.setBlockerProbability(blocker, selectedProbability);
                 });
                 blockerProbabilitySelectPanel.add(blockerProbabilityDropdown);
 
-                // Solution Column
                 JComboBox<SolutionType> solutionDropdown = new JComboBox<>(SolutionType.values());
-                solutionDropdown.setPreferredSize(new Dimension(100, 20)); // Reduced width
+                solutionDropdown.setPreferredSize(new Dimension(100, 20));
                 solutionDropdown.setMaximumSize(new Dimension(100, 20));
                 solutionSelectors.put(blocker, solutionDropdown);
 
@@ -114,36 +96,27 @@ public class ListofSolutionsWidget extends JPanel {
                     solutionDropdown.setSelectedItem(savedSolution);
                 }
 
-                solutionDropdown.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        SolutionType selectedSolution = (SolutionType) solutionDropdown.getSelectedItem();
-                        solutionStore.addSolutionForBlocker(blocker, selectedSolution);
-                    }
+                solutionDropdown.addActionListener(e -> {
+                    SolutionType selectedSolution = (SolutionType) solutionDropdown.getSelectedItem();
+                    solutionStore.addSolutionForBlocker(blocker, selectedSolution);
                 });
                 solutionTypePanel.add(solutionDropdown);
 
-                // Solution Probability Column
                 JComboBox<String> solutionProbabilityDropdown = new JComboBox<>(percentageValues);
-                solutionProbabilityDropdown.setPreferredSize(new Dimension(100, 20)); // Reduced width
+                solutionProbabilityDropdown.setPreferredSize(new Dimension(100, 20));
                 solutionProbabilityDropdown.setMaximumSize(new Dimension(100, 20));
-                
-                // Set saved solution probability
+
                 String savedSolutionProbability = solutionStore.getSolutionProbability(blocker);
                 if (savedSolutionProbability != null) {
                     solutionProbabilityDropdown.setSelectedItem(savedSolutionProbability);
                 }
 
-                solutionProbabilityDropdown.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        String selectedProbability = (String) solutionProbabilityDropdown.getSelectedItem();
-                        solutionStore.setSolutionProbability(blocker, selectedProbability); // Save selected probability
-                    }
+                solutionProbabilityDropdown.addActionListener(e -> {
+                    String selectedProbability = (String) solutionProbabilityDropdown.getSelectedItem();
+                    solutionStore.setSolutionProbability(blocker, selectedProbability);
                 });
                 solutionProbabilitySelectPanel.add(solutionProbabilityDropdown);
 
-                // Add vertical space between each row entry
                 userStoriesPanel.add(Box.createVerticalStrut(10));
                 blockerTypePanel.add(Box.createVerticalStrut(10));
                 blockerProbabilitySelectPanel.add(Box.createVerticalStrut(10));
