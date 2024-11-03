@@ -11,10 +11,10 @@ import javax.swing.border.EmptyBorder;
 public abstract class Wizard<T> extends JFrame implements BaseComponent {
     private final List<WizardPage> pages;
     private int pageNum;
-    private WizardHandler<T> handler;
+    private final WizardHandler<T> handler;
 
     public Wizard(WizardHandler<T> handler) {
-        this.pageNum = 1;
+        this.pageNum = 0;
         this.handler = handler;
         this.initDataModels();
         this.pages = new ArrayList<>(this.build());
@@ -32,6 +32,7 @@ public abstract class Wizard<T> extends JFrame implements BaseComponent {
         JPanel body = new JPanel(bodyLayout);
         body.setBorder(new EmptyBorder(10, 10, 10, 10));
 
+        // Render each page and add it to the body container with a unique ID
         for (WizardPage page : pages) {
             body.add(page.render(), page.getId());
         }
@@ -44,11 +45,12 @@ public abstract class Wizard<T> extends JFrame implements BaseComponent {
         bodyLayout.show(body, this.pages.get(this.pageNum).getId());
     }
 
-    private JPanel buildFooter(CardLayout bodyLayout, JPanel bodyLayoutContainer) {
+    private JPanel buildFooter(CardLayout bodyLayout, JPanel bodyContainer) {
         JPanel footer = new JPanel(new BorderLayout());
         footer.setBorder(new EmptyBorder(5, 10, 5, 5));
-        JLabel steps = new JLabel();
-        this.updateStepsLabel(steps);
+        JLabel stepsLabel = new JLabel();
+        this.updateStepsLabel(stepsLabel);
+        
         JPanel navigation = new JPanel();
 
         JButton cancel = new JButton("Cancel");
@@ -59,57 +61,57 @@ public abstract class Wizard<T> extends JFrame implements BaseComponent {
         JButton finish = new JButton("Finish");
         finish.setVisible(false);
 
-        if (this.getDisplayPageNum() == pages.size()) {
-            next.setVisible(false);
-            finish.setVisible(true);
-        }
+        // Update visibility based on the page number
+        updateNavigationButtons(next, finish);
 
-        cancel.addActionListener(
-                l -> {
-                    onCancel();
-                    dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
-                });
+        // Cancel button action
+        cancel.addActionListener(e -> {
+            onCancel();
+            dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+        });
 
-        previous.addActionListener(
-                l -> {
-                    this.pageNum--;
-                    previous.setEnabled(this.pageNum != 0);
+        // Previous button action
+        previous.addActionListener(e -> {
+            if (pageNum > 0) {
+                pageNum--;
+                updateNavigationButtons(next, finish);
+                bodyLayout.show(bodyContainer, getCurrentPage().getId());
+                updateStepsLabel(stepsLabel);
+            }
+            previous.setEnabled(pageNum != 0);
+        });
 
-                    boolean finished = this.getDisplayPageNum() < pages.size();
-                    next.setVisible(finished);
-                    finish.setVisible(!finished);
+        // Next button action
+        next.addActionListener(e -> {
+            if (pageNum < pages.size() - 1) {
+                pageNum++;
+                updateNavigationButtons(next, finish);
+                bodyLayout.show(bodyContainer, getCurrentPage().getId());
+                updateStepsLabel(stepsLabel);
+            }
+            previous.setEnabled(pageNum > 0);
+        });
 
-                    bodyLayout.show(bodyLayoutContainer, getCurrentPage().getId());
-                    this.updateStepsLabel(steps);
-                });
-
-        next.addActionListener(
-                l -> {
-                    this.pageNum++;
-                    previous.setEnabled(this.pageNum > 0);
-
-                    boolean finished = this.getDisplayPageNum() == pages.size();
-                    next.setVisible(!finished);
-                    finish.setVisible(finished);
-
-                    bodyLayout.show(bodyLayoutContainer, getCurrentPage().getId());
-                    this.updateStepsLabel(steps);
-                });
-
-        finish.addActionListener(
-                l -> {
-                    onSubmit();
-                    dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
-                });
+        // Finish button action
+        finish.addActionListener(e -> {
+            onSubmit();
+            dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+        });
 
         navigation.add(cancel);
         navigation.add(previous);
         navigation.add(next);
         navigation.add(finish);
 
-        footer.add(steps, BorderLayout.WEST);
+        footer.add(stepsLabel, BorderLayout.WEST);
         footer.add(navigation, BorderLayout.EAST);
         return footer;
+    }
+
+    private void updateNavigationButtons(JButton next, JButton finish) {
+        boolean isLastPage = this.pageNum == pages.size() - 1;
+        next.setVisible(!isLastPage);
+        finish.setVisible(isLastPage);
     }
 
     private WizardPage getCurrentPage() {
@@ -117,19 +119,12 @@ public abstract class Wizard<T> extends JFrame implements BaseComponent {
     }
 
     private void updateStepsLabel(JLabel label) {
-        label.setText("Step " + this.getDisplayPageNum() + "/" + pages.size());
+        label.setText("Step " + (this.pageNum + 1) + "/" + pages.size());
     }
 
     /**
-     * Get the display page.
-     *
-     * @return the integer display page
+     * Called when the user completes the wizard. Invoked after the wizard is closed.
      */
-    private int getDisplayPageNum() {
-        return this.pageNum + 1;
-    }
-
-    /** Called when the user completes the wizard. Invoked after the wizard is closed. */
     protected void onSubmit() {
         handler.onSubmit(process());
     }
@@ -152,7 +147,7 @@ public abstract class Wizard<T> extends JFrame implements BaseComponent {
     protected abstract List<WizardPage> build();
 
     /** Abstract class definition for a wizard page. */
-    public abstract static class WizardPage extends JPanel {
+    public abstract static class WizardPage {
         /**
          * A unique identifier for this page. Must be different from other IDs for a given Wizard
          *
