@@ -11,7 +11,7 @@ public class SolutionStore {
     private static SolutionStore instance;
     private List<ListofSolution> solutions;
     private Map<ListofBlocker, SolutionType> blockerSolutions;
-    private Map<ListofBlocker, String> solutionProbabilities; // Store for solution probabilities
+    private Map<ListofBlocker, String> solutionProbabilities;
 
     private SolutionStore() {
         solutions = new ArrayList<>();
@@ -49,18 +49,38 @@ public class SolutionStore {
         return blockerSolutions.get(blocker);
     }
 
-    // Method to set the solution probability for a specific blocker
     public void setSolutionProbability(ListofBlocker blocker, String probability) {
         solutionProbabilities.put(blocker, probability);
     }
 
-    // Method to get the solution probability for a specific blocker
     public String getSolutionProbability(ListofBlocker blocker) {
         return solutionProbabilities.getOrDefault(blocker, "0%");
     }
 
-    // Optional: Method to get all blocker-solution mappings
     public Map<ListofBlocker, SolutionType> getAllBlockerSolutions() {
         return blockerSolutions;
+    }
+
+    /**
+     * Method to retrieve the solution for a user story's primary blocker.
+     * If multiple blockers exist, it returns the solution for the first blocker in the list.
+     *
+     * @param userStory The user story for which the solution is needed.
+     * @return SolutionType The solution type for the first blocker, or null if no solution is found.
+     */
+    public SolutionType getSolutionForUserStoryBlocker(UserStory userStory) {
+        List<String> blockers = userStory.getBlockers();
+        if (blockers.isEmpty()) {
+            return null;  // No blockers assigned to the user story
+        }
+        
+        for (String blockerName : blockers) {
+            ListofBlocker blocker = BlockerStore.getInstance().getBlockerByName(blockerName);
+            SolutionType solution = getSolutionForBlocker(blocker);
+            if (solution != null) {
+                return solution;
+            }
+        }
+        return null;  // No solution found for any of the blockers
     }
 }

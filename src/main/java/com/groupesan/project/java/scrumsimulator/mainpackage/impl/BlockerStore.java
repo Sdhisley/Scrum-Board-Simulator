@@ -82,4 +82,12 @@ public class BlockerStore {
             System.out.println("ex");
         }
     }
+    public ListofBlocker getBlockerByName(String name) {
+        for (ListofBlocker blocker : blockers) {
+            if (blocker.getBlockerType().toString().equals(name)) {
+                return blocker;
+            }
+        }
+        return null;  // Return null if no blocker with the specified name is found
+    }
 }

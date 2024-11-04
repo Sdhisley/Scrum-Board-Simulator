@@ -10,6 +10,8 @@ import java.util.List;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import com.groupesan.project.java.scrumsimulator.mainpackage.impl.ListofSolution.SolutionType;
+import com.groupesan.project.java.scrumsimulator.mainpackage.impl.SolutionStore;
 import com.groupesan.project.java.scrumsimulator.mainpackage.impl.UserStory;
 import com.groupesan.project.java.scrumsimulator.mainpackage.ui.panels.EditUserStoryForm;
 
@@ -45,7 +47,7 @@ public class UserStoryWidget extends JPanel implements BaseComponent {
         isAssigned = createLabel(userStory.getAssignStatus());
         status = createLabel(userStory.getStatus());
         blockerLabel = createLabel(getAllBlockers());  // Blocker label
-        solution = createLabel(userStory.getSolution());  // Solution label
+        solution = createLabel(getSolutionForBlockers());  // Solution label
         blockerStatusLabel = createLabel(getBlockerStatusText());
 
         setLayout(new GridBagLayout());
@@ -107,6 +109,18 @@ public class UserStoryWidget extends JPanel implements BaseComponent {
 
     private String getBlockerStatusText() {
         return userStory.isBlockerResolved() ? "Blocker: Resolved" : "Blocker: Unresolved";
+    }
+
+    private String getSolutionForBlockers() {
+        SolutionType solutionType = SolutionStore.getInstance().getSolutionForUserStoryBlocker(userStory);
+        
+        if (solutionType != null) {
+            System.out.println("Solution for User Story '" + userStory.getName() + "': " + solutionType);
+            return solutionType.toString();
+        } else {
+            System.out.println("No Solution assigned for User Story '" + userStory.getName() + "'");
+            return "No Solution";
+        }
     }
 
     public void updateBlockerStatus() {
