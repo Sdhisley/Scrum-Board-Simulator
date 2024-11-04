@@ -31,3 +31,5 @@ gradle-wrapper.jar
 # Other OS files
 Thumbs.db
 *.class
+
+blockerstore.properties
