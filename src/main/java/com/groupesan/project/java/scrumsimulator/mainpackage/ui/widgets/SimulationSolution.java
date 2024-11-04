@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +27,7 @@ public class SimulationSolution extends JPanel {
     private BlockerStore blockerStore;
     private SolutionStore solutionStore;
     private Map<ListofBlocker, JComboBox<SolutionType>> solutionSelectors;
+    private ActionListener solutionAssignmentListener;
 
     public SimulationSolution() {
         blockerStore = BlockerStore.getInstance();
@@ -75,6 +77,9 @@ public class SimulationSolution extends JPanel {
                 solutionDropdown.addActionListener(e -> {
                     SolutionType selectedSolution = (SolutionType) solutionDropdown.getSelectedItem();
                     solutionStore.addSolutionForBlocker(blocker, selectedSolution);
+                    if (solutionAssignmentListener != null) {
+                        solutionAssignmentListener.actionPerformed(e); // Notify SimulationPanel of solution assignment
+                    }
                 });
                 solutionTypePanel.add(solutionDropdown);
 
@@ -105,5 +110,10 @@ public class SimulationSolution extends JPanel {
 
         JScrollPane scrollPane = new JScrollPane(mainPanel);
         add(scrollPane, BorderLayout.CENTER);
+    }
+
+    // Method to set an ActionListener for solution assignment
+    public void setSolutionAssignmentListener(ActionListener listener) {
+        this.solutionAssignmentListener = listener;
     }
 }
